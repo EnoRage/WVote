@@ -1,5 +1,4 @@
-const mongoose = require("mongoose"),
-    Foundations = require('./schemas/foundation.js');
+const mongoose = require("mongoose");
 
 mongoose.Promise = global.Promise;
 

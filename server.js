@@ -28,13 +28,22 @@ app.post('/getAddress', (req, res) => {
 // Отправляем транзакцию в блокчейн
 app.post('/sendTx', (req, res) => {
     let data = req.body;
-    
+    Waves.sendTx(data.address, data.currency, data.amount, data.userID, data.encryptedSeed, (transactionStatus) => {
+        if (transactionStatus == '200') {
+            res.send('200');
+        } else {
+            res.send('400');
+        }
+    })
 });
 
-// Получаем баланс аккаунта
+// Получаем баланс токенов или Waves
 app.post('/getBalance', (req, res) => {
     let data = req.body;
-    
+    let balance = Waves.getBalance(data.address, data.currency, (balance) => {
+        if (balance == false) res.send('400');
+        res.send(balance);
+    });
 });
 
 app.listen(3000);
