@@ -1,7 +1,9 @@
 const mongoose = require("mongoose"),
     ObjectId = require('mongoose').Types.ObjectId; 
     Users = require('./schemas/usersSchema.js');
-    Organizations = require('./schemas/organisationsSchema.js');
+    Organizations = require('./schemas/organisationsSchema.js'),
+    Votes = require('./schemas/votes.js').votes;
+    Voters = require('./schemas/votes.js').voters;
 
 mongoose.Promise = global.Promise;
 
@@ -57,5 +59,20 @@ function findUserByAddress(address, callback) {
 function findAllUsers(address, callback) {
     Users.find({}, (err,doc) => {
         callback(doc);
+    })
+}
+
+
+// Создание голосования
+function createVote(organizationID, description) {
+    Votes.create({organizationID: new ObjectId(organizationID), description: description}, (err,doc) => {
+
+    })
+}
+
+// Принять участие в голосовании
+function takePartInVote(voteID, description) {
+    Votes.create({voteID: new ObjectId(voteID), address: address, vote: vote}, (err,doc) => {
+
     })
 }
