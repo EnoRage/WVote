@@ -14,7 +14,7 @@ var VotersSchema = new Schema({
 });
 
 var UserSchema = new Schema({
-    sell: [ProductSchema]
+    sell: [VotersSchema]
 });
 
 var Votes = new Schema({
