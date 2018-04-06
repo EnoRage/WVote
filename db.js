@@ -21,11 +21,10 @@ const options = {
 const db = mongoose.connect(uri).then(console.log('Mongo DB works fine'));
 
 // Добавление организации в базу данных
-function addOrganisation(name, description, approvedAddresses) {
+function addOrganisation(name, descriptions) {
     Organizations.create({
         name: name,
-        description: description,
-        approvedAddresses: approvedAddresses
+        description: description
     }, (err, doc) => {
 
     });
@@ -33,7 +32,7 @@ function addOrganisation(name, description, approvedAddresses) {
 
 // Поиск доступных адресов для голсования конкретной организации
 function findApprovedAddresses(organisationID, callback) {
-    Organizations.find({
+    Votes.find({
         _id: new ObjectId(organisationID)
     }, (err, doc) => {
         callback(doc[0].approvedAddresses);
@@ -44,11 +43,11 @@ function findApprovedAddresses(organisationID, callback) {
 function findApprovedAddressesInAll(address, callback) {
     var organisationsID = [];
 
-    Organizations.find({}, (err, organisations) => {
-        for (let i in organisations) {
-            for (let j in organisations[i].approvedAddresses) {
-                if (organisations[i].approvedAddresses[j] == address) {
-                    organisationsID.push(organisations[i]._id);
+    Votes.find({}, (err, vote) => {
+        for (let i in vote) {
+            for (let j in vote[i].approvedAddresses) {
+                if (vote[i].approvedAddresses[j] == address) {
+                    organisationsID.push(organisations[i].organisationID);
                 }
             }
         }

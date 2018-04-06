@@ -13,10 +13,6 @@ var VotersSchema = new Schema({
     }
 });
 
-var UserSchema = new Schema({
-    sell: [VotersSchema]
-});
-
 var Votes = new Schema({
     organisationID: {
         type: Schema.Types.ObjectId
@@ -24,6 +20,14 @@ var Votes = new Schema({
     description: {
         type: String,
         default: ""
+    },
+    approvedAddresses: {
+        type: Array,
+        default: ""
+    },
+    end: {
+        type: Date,
+        default: Date.now() + 99999999
     }
 }, {
     versionKey: false

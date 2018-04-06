@@ -8,10 +8,6 @@ var Organisations = new Schema({
     description: {
         type: String,
         default: ""
-    },
-    approvedAddresses: {
-        type: Array,
-        default: ""
     }
 }, {
     versionKey: false
