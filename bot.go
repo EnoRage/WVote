@@ -70,7 +70,7 @@ func main() {
 		msg += "\n\nВаш баланс: "
 		// msg += balance
 		msg += " (РУБ)"
-		msg += "\n\nТут вы можете найти открытые голосования и посмотреть результаты прошлых"
+		msg += "\n\nТут вы можете посмотреть результаты прошлых голосований"
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: viewMenu})
 	})
 	b.Handle(&viewRes, func(c *tb.Callback) {
@@ -150,7 +150,27 @@ func main() {
 		b.Send(c.Sender, "Главное меню", &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{ResizeReplyKeyboard: true, ReplyKeyboard: mainMenu})
 		b.Respond(c, &tb.CallbackResponse{})
 	})
+	b.Handle(&viewRes, func(c *tb.Callback) {
+		var msg = "Список организаций, куда в проголосовали:\n\n"
+		msg += "Организация: 1\n\n"
+		msg += "Ваш голос: да\n\n"
+		msg += "Тема голосования: 1\n\n"
+		msg += "Завершен: да\n\n"
+		msg += "Результат: 70 за и 30 против\n\n"
+		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"})
 
+		var msg2 = "Ваш публичный адрес: "
+		// msg += addressPub
+		msg2 += "\n\nВаш seed: "
+		// msg += seed
+		msg2 += "\n\nВаш баланс: "
+		// msg += balance
+		msg2 += " (РУБ)"
+		msg2 += "\n\nТут вы можете посмотреть результаты прошлых голосований"
+
+		b.Send(c.Sender, msg2, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: viewMenu})
+		b.Respond(c, &tb.CallbackResponse{})
+	})
 	b.Start()
 	// Обработчики на главное меню
 }
