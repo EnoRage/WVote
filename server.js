@@ -2,6 +2,7 @@ const express = require('express'),
     url = require("url"),
     bodyParser = require('body-parser'),
     Waves = require('./waves.js'),
+    Course = require('./course.js'),
     db = require('./db.js');
 
 
