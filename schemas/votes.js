@@ -1,5 +1,3 @@
-import { Bool } from 'waves-api/raw/src/classes/ByteProcessor';
-
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
