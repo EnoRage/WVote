@@ -94,4 +94,12 @@ app.post('/totalVotes', (req, res) => {
     }    
 });
 
+// Проголосовать
+app.post('/findAllVotes', (req, res) => {
+    let data = req.body;
+    db.findAllVotes((votesArray) => {
+        res.send(votesArray);
+    });
+});
+
 app.listen(3001);

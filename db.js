@@ -151,6 +151,12 @@ function voteNo(num, callback) {
     })
 }
 
+function findAllVotes(callback) {
+    Votes.find({}, (err,doc) => {
+        callback(doc);
+    })
+}
+
 module.exports.addOrganisation = addOrganisation;
 module.exports.findApprovedAddresses = findApprovedAddresses;
 module.exports.findApprovedAddressesInAll = findApprovedAddressesInAll;
@@ -162,3 +168,4 @@ module.exports.createVote = createVote;
 module.exports.takePartInVote = takePartInVote;
 module.exports.voteYes = voteYes;
 module.exports.voteNo = voteNo;
+module.exports.findAllVotes = findAllVotes
