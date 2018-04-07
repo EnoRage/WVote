@@ -32,19 +32,20 @@ func post(url1 string, data url.Values) string {
 }
 
 // CreateSeed Получаем зашифрованный seed
-func CreateSeed() string {
+func CreateSeed(userID string, name string) string {
 	postData := url.Values{
-		"nil": {},
+		"userID": {userID},
+		"name":   {name},
 	}
 	prvtKey := post("http://localhost:3000/createSeed", postData)
 	return prvtKey
 }
 
 // GetAddress Получение адреса по зашифрованному сиду
-func GetAddress(userID string, encryptedSeed string) string {
+func GetAddress(userID string, seed string) string {
 	postData := url.Values{
-		"userID":        {userID},
-		"encryptedSeed": {encryptedSeed},
+		"userID": {userID},
+		"seed":   {seed},
 	}
 	address := post("http://localhost:3000/getAddress", postData)
 	return address

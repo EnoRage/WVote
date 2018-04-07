@@ -18,6 +18,5 @@ func Auth(session *mgo.Session, userID string) bool {
 
 // Register Регистрация в БД
 func Register(session *mgo.Session, userID string, userName string, ecryptedSeed string, address string) {
-
 	mongo.AddUser(session, userID, userName, ecryptedSeed, address)
 }
