@@ -47,4 +47,11 @@ app.post('/getBalance', (req, res) => {
     });
 });
 
+// Создать нового пользователя
+app.post('/addUser', (req, res) => {
+    let data = req.body;
+    db.addUser(data.userID, data.name, data.encryptedSeed, data.address);
+    res.send('200');
+});
+
 app.listen(3000);
