@@ -9,7 +9,7 @@ mongoose.Promise = global.Promise;
 
 const user = 'erage';
 const password = 'doBH8993nnjdoBH8993nnj';
-const uri = 'mongodb://' + user + ':' + password + '@51.144.89.99:27017/admin?authSource=admin';
+const uri = 'mongodb://' + user + ':' + password + '@51.144.89.99:27017/unblock?authSource=admin';
 
 const options = {
     autoIndex: false,
@@ -103,7 +103,7 @@ function createVote(organizationID, description) {
 
     });
 }
-
+// addUser('213142131', 'Kirill', 'wefrgfhgnhfrewfgfngdse', '23453rfewdwefdgrr')
 // Принять участие в голосовании
 function takePartInVote(voteID, description) {
     Votes.create({

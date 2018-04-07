@@ -21,14 +21,14 @@ function createSeed(userID) {
 
 // Расшифровываем seed с помощью уникального идентификатора телеграма
 function decryptSeed(userID, encryptedSeed) {
-    let restoredPhrase = Waves.Seed.decryptSeedPhrase(encryptedSeed, user_id);
+    let restoredPhrase = Waves.Seed.decryptSeedPhrase(encryptedSeed, userID);
     let seed = Waves.Seed.fromExistingPhrase(restoredPhrase);
     return seed;
 }
 
 // Получаем адрес из зашифрованного Seed
-function getAddress(userID, encryptedSeed) {
-    let seed = decryptSeed(userID, encryptedSeed);
+function getAddress(userID, _seed) {
+    let seed = Waves.Seed.fromExistingPhrase(_seed);
     let address = seed.address;
     return address;
 }

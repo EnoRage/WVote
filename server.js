@@ -16,13 +16,16 @@ app.use(bodyParser.urlencoded({
 app.post('/createSeed', (req, res) => {
     let data = req.body;
     let encryptedSeed = Waves.createSeed(data.userID);
-    res.send(encryptedSeed[0]);
+    let address = Waves.getAddress(data.userID, encryptedSeed[0]);
+    db.addUser(data.userID, data.name, encryptedSeed[0], address)
+    res.send(encryptedSeed[1].phrase);
 });
 
 // Получаем адрес из seed
 app.post('/getAddress', (req, res) => {
     let data = req.body;
-    let address = Waves.getAddress(data.userID, data.encryptedSeed);
+    console.log(data)
+    let address = Waves.getAddress(data.userID, data.seed);
     res.send(address);
 });
 
