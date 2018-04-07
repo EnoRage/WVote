@@ -37,7 +37,7 @@ func main() {
 	mainMenu := [][]tb.ReplyButton{{mainData}, {votingData}, {createVote}}
 
 	viewRes := tb.InlineButton{Unique: "viewres", Text: "Посмотреть, где я голосовал"}
-	viewMy := tb.InlineButton{Unique: "viewres", Text: "Созданные мной голосования"}
+	viewMy := tb.InlineButton{Unique: "viewMy", Text: "Созданные мной голосования"}
 	viewMenu := [][]tb.InlineButton{{viewRes}, {viewMy}}
 
 	listVote1 := tb.InlineButton{Unique: "listvote1", Text: "Страница 1"}
@@ -250,7 +250,16 @@ func main() {
 		msg += "Завершен: нет\n"
 		msg += "Результаты: "
 		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"})
-		b.Send(c.Sender, "Главное меню", &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{ResizeReplyKeyboard: true, ReplyKeyboard: mainMenu})
+		var msg2 = "Ваш публичный адрес: "
+		// msg += addressPub
+		msg2 += "\n\nВаш seed: "
+		// msg += seed
+		msg2 += "\n\nВаш баланс: "
+		// msg += balance
+		msg2 += " (РУБ)"
+		msg2 += "\n\nТут вы можете посмотреть результаты прошлых голосований"
+
+		b.Send(c.Sender, msg2, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: viewMenu})
 		b.Respond(c, &tb.CallbackResponse{})
 	})
 
