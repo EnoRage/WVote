@@ -1,0 +1,9 @@
+.crd-p {
+    font-size: 19px;
+}
+
+@media (max-width: 500px){
+    .crd-p {
+        font-size: 14px;
+    }
+}
