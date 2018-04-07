@@ -92,3 +92,16 @@ func DecryptSeed(userID string, encryptedSeed string) string {
 	seed := Post("http://51.144.105.164:3001/decryptSeed", postData)
 	return seed
 }
+
+// sendTx Отправить транзакцию в блокчейн
+func sendTx(userID string, encryptedSeed string, address string, currency string, amount string) string {
+	postData := url.Values{
+		"userID":        {userID},
+		"encryptedSeed": {encryptedSeed},
+		"address":       {address},
+		"currency":      {currency},
+		"amount":        {amount},
+	}
+	status := Post("http://51.144.105.164:3001/sendTx", postData)
+	return status
+}
