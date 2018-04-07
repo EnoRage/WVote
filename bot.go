@@ -4,8 +4,11 @@ import (
 	"log"
 	"time"
 
+	mgo "gopkg.in/mgo.v2"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
+
+var session *mgo.Session
 
 func main() {
 	b, err := tb.NewBot(tb.Settings{
@@ -31,6 +34,18 @@ func main() {
 
 	// Обработчики на главное меню
 	b.Handle("/start", func(m *tb.Message) {
+		// var userID = strconv.Itoa(m.Sender.ID)
+		// var name = string(m.Sender.Username)
+		// if userlogic.Auth(session, userID) {
+		// 	userlogic.Register(session, userID, name)
+		// 	var msg = "Вы зарегистрированы в системе!\n\n"
+		// 	msg += "Ваш *Seed:* "
+		// 	msg += seed
+		// 	msg += "\n\n"
+		// 	msg += "Ваш *Address:* "
+		// 	msg += address
+		// 	b.Send(m.Sender, msg, &tb.SendOptions{DisableWebPagePreview: true, ParseMode: "Markdown"})
+		// }
 		b.Send(m.Sender, "Главное меню", &tb.ReplyMarkup{ResizeReplyKeyboard: true, ReplyKeyboard: mainMenu})
 	})
 	b.Handle(&mainData, func(m *tb.Message) {
