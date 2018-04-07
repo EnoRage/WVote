@@ -6,8 +6,7 @@ const Waves = WavesAPI.create(WavesAPI.TESTNET_CONFIG);
 
 const newConfig = {
     networkByte: Waves.constants.MAINNET_BYTE,
-    nodeAddress: 'https://nodes.wavesnodes.com',
-    matcherAddress: 'https://nodes.wavesnodes.com/matcher',
+    nodeAddress: 'http://nodes.unblock.wavesnodes.com:6869',
     minimumSeedLength: 50
 };
 
