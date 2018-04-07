@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var VotersSchema = new Schema({
-    voteID: {
-        type: Schema.Types.ObjectId
+var Voters = new Schema({
+    num: {
+        type: Number
     }, 
-    userID: {
+    address: {
         type: String
     },
     vote: {
@@ -14,8 +14,8 @@ var VotersSchema = new Schema({
 });
 
 var Votes = new Schema({
-    organisationID: {
-        type: Schema.Types.ObjectId
+    num: {
+        type: Number
     },
     description: {
         type: String,
@@ -25,13 +25,17 @@ var Votes = new Schema({
         type: Array,
         default: ""
     },
+    startTime: {
+        type: Date,
+        default: Date.now()
+    },
     endTime: {
         type: Date,
-        default: Date.now() + 99999999
+        default: Date.now() + 99999
     }
 }, {
     versionKey: false
 });
 
 module.exports.votes = mongoose.model('Votes', Votes);
-module.exports.voters = mongoose.model('VotersSchema', VotersSchema);
+module.exports.voters = mongoose.model('Voters', Voters);

@@ -95,25 +95,64 @@ function findAllUsers(address, callback) {
 
 
 // Создание голосования
-function createVote(organizationID, description) {
-    Votes.create({
-        organizationID: new ObjectId(organizationID),
-        description: description
-    }, (err, doc) => {
-
-    });
+function createVote(userID, description) {
+    Votes.find({}, {}, {sort: {num: -1}}, (err,doc) => {
+        var _num;
+        if(doc.length != 0) {
+            _num = doc[0].num + 1;
+        } else {
+            _num = 1;
+        }
+        Votes.create({
+            num: Number(_num),
+            userID: userID,
+            description: description
+        }, (err, doc) => {
+    
+        });
+    }).limit(1);
 }
-// addUser('213142131', 'Kirill', 'wefrgfhgnhfrewfgfngdse', '23453rfewdwefdgrr')
+
 // Принять участие в голосовании
-function takePartInVote(voteID, description) {
-    Votes.create({
-        voteID: new ObjectId(voteID),
+function takePartInVote(num, address, vote) {
+    Voters.create({
+        num: Number(num),
         address: address,
         vote: vote
     }, (err, doc) => {
 
     });
 }
+
+// Подсчитать все голоса за
+function voteYes(num, callback) {
+    Voters.find({num: Number(num)}, (err, voters) => {
+        var yesVote = 0;
+        for (let i in voters) {
+         if (voters[i].vote == true) {
+             yesVote += 1;
+         }
+        }
+        callback(yesVote)
+    })
+}
+
+// Подсчитать все голоса против
+function voteNo(num, callback) {
+    Voters.find({num: Number(num)}, (err, voters) => {
+        var noVote = 0;
+        for (let i in voters) {
+         if (voters[i].vote == false) {
+             noVote += 1;
+         }
+        }
+        callback(noVote)
+    })
+}
+
+voteNo(2, (rrr) => {
+    console.log(rrr)
+})
 
 module.exports.addOrganisation = addOrganisation;
 module.exports.findApprovedAddresses = findApprovedAddresses;
@@ -124,3 +163,5 @@ module.exports.findUserByAddress = findUserByAddress;
 module.exports.findAllUsers = findAllUsers;
 module.exports.createVote = createVote;
 module.exports.takePartInVote = takePartInVote;
+module.exports.voteYes = voteYes;
+module.exports.voteNo = voteNo;

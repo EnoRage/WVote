@@ -64,4 +64,34 @@ app.post('/addUser', (req, res) => {
     res.send('200');
 });
 
+// Создать голосование
+app.post('/createVote', (req, res) => {
+    let data = req.body;
+    db.createVote(data.userID, data.description);
+    res.send('200');
+});
+
+// Проголосовать
+app.post('/vote', (req, res) => {
+    let data = req.body;
+    // Тут в блокчейн заносится
+    db.takePartInVote(data.voteID, data.address, data.vote);
+    res.send('200');
+});
+
+// Подсчитать голоса
+app.post('/totalVotes', (req, res) => {
+    // единица - за, нуль - против
+    let data = req.body;
+    if (data.whatVote == 0) {
+        db.voteNo(data.num, (count) => {
+            res.send(count);
+        });
+    } else {
+        db.voteYes(data.num, (count) => {
+            res.send(count);
+        });
+    }    
+});
+
 app.listen(3001);
