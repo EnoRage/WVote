@@ -52,7 +52,7 @@ app.post('/getBalance', (req, res) => {
     let data = req.body;
     console.log(data)
     let balance = Waves.getBalance(data.address, data.currency, (balance) => {
-        if (balance == false) {res.send('400');}
+        // if (balance == false) {res.send('400');}
         res.send(String(balance));
     });
 });
