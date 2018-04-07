@@ -1,3 +1,5 @@
+import { Bool } from 'waves-api/raw/src/classes/ByteProcessor';
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -32,6 +34,10 @@ var Votes = new Schema({
     endTime: {
         type: Date,
         default: Date.now() + 99999
+    },
+    end: {
+        type: Boolean,
+        default: false
     }
 }, {
     versionKey: false

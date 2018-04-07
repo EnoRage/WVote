@@ -75,7 +75,7 @@ app.post('/createVote', (req, res) => {
 app.post('/vote', (req, res) => {
     let data = req.body;
     // Тут в блокчейн заносится
-    db.takePartInVote(data.voteID, data.address, data.vote);
+    db.takePartInVote(data.voteNum, data.address, data.vote);
     res.send('200');
 });
 
@@ -83,7 +83,7 @@ app.post('/vote', (req, res) => {
 app.post('/totalVotes', (req, res) => {
     // единица - за, нуль - против
     let data = req.body;
-    if (data.whatVote == 0) {
+    if (data.whatVote == '0') {
         db.voteNo(data.num, (count) => {
             res.send(count);
         });

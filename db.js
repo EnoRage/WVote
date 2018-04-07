@@ -150,10 +150,6 @@ function voteNo(num, callback) {
     })
 }
 
-voteNo(2, (rrr) => {
-    console.log(rrr)
-})
-
 module.exports.addOrganisation = addOrganisation;
 module.exports.findApprovedAddresses = findApprovedAddresses;
 module.exports.findApprovedAddressesInAll = findApprovedAddressesInAll;
