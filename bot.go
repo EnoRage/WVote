@@ -7,6 +7,7 @@ import (
 
 	"./mongo"
 	"./userlogic"
+	"./votes"
 	"./waves"
 
 	mgo "gopkg.in/mgo.v2"
@@ -27,8 +28,8 @@ var golosData = ""
 
 func main() {
 	b, err := tb.NewBot(tb.Settings{
-		// Token: "586866387:AAHmxTxHOUxZyjhauJ3yxedpPTWUpNxLUQE", // t.me/waves_vote_bot  для Никиты
-		Token:  "595106358:AAFyY_w1SNHReDF2j9eQQjhNHBIhElDU_QY", // t.me/test_waves_vote_bot для Кирилла
+		Token: "586866387:AAHmxTxHOUxZyjhauJ3yxedpPTWUpNxLUQE", // t.me/waves_vote_bot  для Никиты
+		// Token:  "595106358:AAFyY_w1SNHReDF2j9eQQjhNHBIhElDU_QY", // t.me/test_waves_vote_bot для Кирилла
 		Poller: &tb.LongPoller{Timeout: 10 * time.Second},
 	})
 
@@ -253,10 +254,11 @@ func main() {
 		})
 	})
 	b.Handle(&voteyes2, func(m *tb.Message) {
+		userID := strconv.Itoa(m.Sender.ID)
+		votes.CreateVote(userID, golosTheme, golosData)
 		b.Send(m.Sender, "Вы успешно создали голосование, его можно посмотреть в *текущих голосованиях* или в *моих голосованиях* в *моем кабинете*", &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{ResizeReplyKeyboard: true, ReplyKeyboard: mainMenu})
 	})
 	b.Handle(&voteno2, func(m *tb.Message) {
-		golosTheme = ""
 		golosData = ""
 		enterData = false
 		enterName = false

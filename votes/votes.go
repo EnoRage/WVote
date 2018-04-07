@@ -6,13 +6,17 @@ import (
 	"../waves"
 )
 
+// var serverIP string = "51.144.105.164"
+var serverIP string = "localhost"
+
 // CreateVote создание голосование
-func CreateVote(userID string, description string) string {
+func CreateVote(userID string, description string, endTime string) string {
 	data := url.Values{
 		"userID":      {userID},
 		"description": {description},
+		"endTime":     {endTime},
 	}
-	url1 := "http://51.144.105.164:3001/createSeed"
+	url1 := "http://" + serverIP + ":3001/createVote"
 
 	body := waves.Post(url1, data)
 
@@ -26,7 +30,7 @@ func Vote(voteNum string, address string, vote string) string {
 		"address": {address},
 		"vote":    {vote},
 	}
-	url1 := "http://51.144.105.164:3001/vote"
+	url1 := "http://" + serverIP + ":3001/vote"
 
 	body := waves.Post(url1, data)
 
@@ -39,7 +43,7 @@ func TotalVote(voteNum string, whatVote string) string {
 		"voteNum":  {voteNum},
 		"whatVote": {whatVote},
 	}
-	url1 := "http://51.144.105.164:3001/totalVotes"
+	url1 := "http://" + serverIP + ":3001/totalVotes"
 
 	body := waves.Post(url1, data)
 
