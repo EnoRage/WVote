@@ -6,7 +6,7 @@
 [Bb]in/
 packages/
 TestResults/
-
+*.mfractor/
 # globs
 Makefile.in
 *.DS_Store
