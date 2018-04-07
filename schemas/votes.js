@@ -5,7 +5,7 @@ var VotersSchema = new Schema({
     voteID: {
         type: Schema.Types.ObjectId
     }, 
-    address: {
+    userID: {
         type: String
     },
     vote: {
@@ -25,7 +25,7 @@ var Votes = new Schema({
         type: Array,
         default: ""
     },
-    end: {
+    endTime: {
         type: Date,
         default: Date.now() + 99999999
     }

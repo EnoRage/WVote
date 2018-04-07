@@ -114,3 +114,13 @@ function takePartInVote(voteID, description) {
 
     });
 }
+
+module.exports.addOrganisation = addOrganisation;
+module.exports.findApprovedAddresses = findApprovedAddresses;
+module.exports.findApprovedAddressesInAll = findApprovedAddressesInAll;
+module.exports.addUser = addUser;
+module.exports.findUserByUserID = findUserByUserID;
+module.exports.findUserByAddress = findUserByAddress;
+module.exports.findAllUsers = findAllUsers;
+module.exports.createVote = createVote;
+module.exports.takePartInVote = takePartInVote;
