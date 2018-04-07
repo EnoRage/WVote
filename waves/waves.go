@@ -37,7 +37,7 @@ func CreateSeed(userID string, name string) string {
 		"userID": {userID},
 		"name":   {name},
 	}
-	prvtKey := post("http://localhost:3001/createSeed", postData)
+	prvtKey := post("http://51.144.105.164:3001/createSeed", postData)
 	return prvtKey
 }
 
@@ -47,7 +47,7 @@ func GetAddress(userID string, seed string) string {
 		"userID": {userID},
 		"seed":   {seed},
 	}
-	address := post("http://localhost:3000/getAddress", postData)
+	address := post("http://51.144.105.164:3001/getAddress", postData)
 	return address
 }
 
@@ -57,7 +57,7 @@ func GetBalance(address string, currency string) string {
 		"address":  {address},
 		"currency": {currency},
 	}
-	balance := post("http://localhost:3001/getBalance", postData)
+	balance := post("http://51.144.105.164:3001/getBalance", postData)
 	return balance
 }
 
@@ -89,6 +89,6 @@ func DecryptSeed(userID string, encryptedSeed string) string {
 		"userID":        {userID},
 		"encryptedSeed": {encryptedSeed},
 	}
-	seed := post("http://localhost:3001/decryptSeed", postData)
+	seed := post("http://51.144.105.164:3001/decryptSeed", postData)
 	return seed
 }
