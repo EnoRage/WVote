@@ -15,16 +15,22 @@ app.use(bodyParser.urlencoded({
 // Создаём seed (отправляем зашифрованный seed)
 app.post('/createSeed', (req, res) => {
     let data = req.body;
-    let encryptedSeed = Waves.createSeed(data.userID);
-    let address = Waves.getAddress(data.userID, encryptedSeed[0]);
-    db.addUser(data.userID, data.name, encryptedSeed[0], address)
-    res.send(encryptedSeed[1].phrase);
+    let seed = Waves.createSeed(data.userID);
+    let address = Waves.getAddress(data.userID, seed[1].phrase);
+    db.addUser(data.userID, data.name, seed[0], address)
+    res.send(seed[1].phrase);
+});
+
+// Получаем адрес из seed
+app.post('/decryptSeed', (req, res) => {
+    let data = req.body;
+    let seed = Waves.decryptSeed(data.userID, data.encryptedSeed);
+    res.send(seed.phrase);
 });
 
 // Получаем адрес из seed
 app.post('/getAddress', (req, res) => {
     let data = req.body;
-    console.log(data)
     let address = Waves.getAddress(data.userID, data.seed);
     res.send(address);
 });
@@ -44,9 +50,10 @@ app.post('/sendTx', (req, res) => {
 // Получаем баланс токенов или Waves
 app.post('/getBalance', (req, res) => {
     let data = req.body;
+    console.log(data)
     let balance = Waves.getBalance(data.address, data.currency, (balance) => {
-        if (balance == false) res.send('400');
-        res.send(balance);
+        if (balance == false) {res.send('400');}
+        res.send(String(balance));
     });
 });
 
