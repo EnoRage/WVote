@@ -1,0 +1,23 @@
+{
+  "name": "verification_triggered_server",
+  "version": "0.0.1",
+  "description": "Сервер, котрый слушает адреса и пушает данные в блокчейн",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EnoRage/WVote.git"
+  },
+  "author": "krboktv, erage",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EnoRage/WVote/issues"
+  },
+  "homepage": "https://github.com/EnoRage/WVote#readme",
+  "dependencies": {
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2"
+  }
+}
