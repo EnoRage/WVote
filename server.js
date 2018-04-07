@@ -58,7 +58,7 @@ app.post('/getBalance', (req, res) => {
 });
 
 // Создать нового пользователя
-app.post('/addUser', (req, res) => {
+app.post('/addUser', (req,   res) => {
     let data = req.body;
     db.addUser(data.userID, data.name, data.encryptedSeed, data.address);
     res.send('200');
@@ -67,7 +67,7 @@ app.post('/addUser', (req, res) => {
 // Создать голосование
 app.post('/createVote', (req, res) => {
     let data = req.body;
-    db.createVote(data.userID, data.description);
+    db.createVote(data.userID, data.description, data.endTime);
     res.send('200');
 });
 

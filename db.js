@@ -95,7 +95,7 @@ function findAllUsers(address, callback) {
 
 
 // Создание голосования
-function createVote(userID, description) {
+function createVote(userID, description, endTime) {
     Votes.find({}, {}, {sort: {num: -1}}, (err,doc) => {
         var _num;
         if(doc.length != 0) {
@@ -106,7 +106,8 @@ function createVote(userID, description) {
         Votes.create({
             num: Number(_num),
             userID: userID,
-            description: description
+            description: description,
+            endTime: Date.now() + endTime*(3600000)
         }, (err, doc) => {
     
         });
