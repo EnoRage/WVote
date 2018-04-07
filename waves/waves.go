@@ -82,3 +82,13 @@ func GetWavesBalance(address string) gjson.Result {
 	balance := gjson.Get(string(body), "balance")
 	return balance
 }
+
+// DecryptSeed Расшифровываем Seed
+func DecryptSeed(userID string, encryptedSeed string) string {
+	postData := url.Values{
+		"userID":        {userID},
+		"encryptedSeed": {encryptedSeed},
+	}
+	seed := post("http://localhost:3000/decryptSeed", postData)
+	return seed
+}

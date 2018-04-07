@@ -109,13 +109,17 @@ func main() {
 		b.Send(m.Sender, "Главное меню", &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{ResizeReplyKeyboard: true, ReplyKeyboard: mainMenu})
 	})
 	b.Handle(&mainData, func(m *tb.Message) {
+		var userID = strconv.Itoa(m.Sender.ID)
+		user := mongo.FindUser(session, userID)
+		seed := waves.DecryptSeed(userID, user.EncryptedSeed)
+		balance := waves.GetBalance(user.Address, "Waves")
 		var msg = "Ваш публичный адрес: "
-		// msg += addressPub
+		msg += user.Address
 		msg += "\n\nВаш seed: "
-		// msg += seed
+		msg += seed
 		msg += "\n\nВаш баланс: "
-		// msg += balance
-		msg += " (РУБ)"
+		msg += balance
+		// msg += " (РУБ)"
 		msg += "\n\nТут вы можете посмотреть результаты прошлых голосований"
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: viewMenu})
 	})
