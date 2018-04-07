@@ -14,6 +14,15 @@
     <Compile Update="UI\Pages\MainBurger\MenuPage.xaml.cs">
       <DependentUpon>MenuPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="UI\Pages\VotingHistory\VotingHistoryPage.xaml.cs">
+      <DependentUpon>VotingHistoryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Pages\Auth\AuthPage.xaml.cs">
+      <DependentUpon>AuthPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Pages\Settings\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="2.5.1.444934" />
@@ -39,6 +48,13 @@
   <ItemGroup>
     <Folder Include="UI\Pages\MainBurger\" />
     <Folder Include="BL\ViewModels\MainBurger\" />
-    <Folder Include="UI\Pages\Voting\" />
+    <Folder Include="UI\Pages\CurrentVotings\" />
+    <Folder Include="BL\ViewModels\CurrentVotings\" />
+    <Folder Include="UI\Pages\VotingHistory\" />
+    <Folder Include="BL\ViewModels\VotingHistory\" />
+    <Folder Include="UI\Pages\Auth\" />
+    <Folder Include="UI\Pages\Settings\" />
+    <Folder Include="BL\ViewModels\Auth\" />
+    <Folder Include="BL\ViewModels\Settings\" />
   </ItemGroup>
 </Project>

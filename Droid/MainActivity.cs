@@ -8,6 +8,8 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using UnblockHackNET;
+using Acr.UserDialogs;
+using Xamarin.Forms;
 
 namespace UnblockHackMobile.Droid
 {
@@ -20,6 +22,8 @@ namespace UnblockHackMobile.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(bundle);
+
+            UserDialogs.Init(() => (Activity) Forms.Context);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
 

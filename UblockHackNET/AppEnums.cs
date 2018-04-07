@@ -3,7 +3,11 @@
     public enum Pages
     {
         Main,
-        Menu
+        Menu,
+        CurrentVotings,
+        VotingHistory,
+        Settings,
+        Auth
     }
 
     public enum NavigationMode

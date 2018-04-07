@@ -14,7 +14,8 @@ namespace UnblockHackNET
 
             NavigationService.Init(this);
             DialogService.Init(this);
-            NavigationService.Instance.SetMainMasterDetailPage(Pages.Menu, Pages.Main, invokeOnMainThread: true);
+            NavigationService.Instance.SetMainPage(Pages.Auth);
+            //NavigationService.Instance.SetMainMasterDetailPage(Pages.Menu, Pages.Main, invokeOnMainThread: true);
             // MainPage = new MainPage();
         }
 

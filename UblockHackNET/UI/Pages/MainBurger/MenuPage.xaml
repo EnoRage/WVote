@@ -8,5 +8,9 @@
         <Label
             Text="Menu Page">
         </Label>
+        <Button Text="Main" Command="{Binding GoToMainCommand}"></Button>
+        <Button Text="Settings" Command="{Binding GoToSettingsCommand}"></Button>
+        <Button Text="Exit" Command="{Binding GoToSettingsCommand}"></Button>
+
     </StackLayout>
 </pages:BasePage>

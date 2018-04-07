@@ -3,10 +3,12 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="UnblockHackNET.UI.Pages.MainBurger.MainPage"
-    xmlns:pages="clr-namespace:UnblockHackNET.UI.Pagess">
+    xmlns:pages="clr-namespace:UnblockHackNET.UI.Pages">
     <StackLayout>
         <Label
             Text="Main Page">
         </Label>
+        <Button Text="История голосований" Command="{Binding GoToHistoryCommand}"></Button>
+        <Button Text="Текущие голосования" Command="{Binding GoToCurVotingCommand}"></Button>
     </StackLayout>
 </pages:BasePage>
