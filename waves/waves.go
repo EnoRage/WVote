@@ -10,8 +10,8 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-// post Пост запрос с параметрами в тело
-func post(url1 string, data url.Values) string {
+// Post Пост запрос с параметрами в тело
+func Post(url1 string, data url.Values) string {
 	form := data
 	body1 := bytes.NewBufferString(form.Encode())
 	req, err := http.NewRequest("POST", url1, body1)
@@ -37,7 +37,7 @@ func CreateSeed(userID string, name string) string {
 		"userID": {userID},
 		"name":   {name},
 	}
-	prvtKey := post("http://51.144.105.164:3001/createSeed", postData)
+	prvtKey := Post("http://51.144.105.164:3001/createSeed", postData)
 	return prvtKey
 }
 
@@ -47,7 +47,7 @@ func GetAddress(userID string, seed string) string {
 		"userID": {userID},
 		"seed":   {seed},
 	}
-	address := post("http://51.144.105.164:3001/getAddress", postData)
+	address := Post("http://51.144.105.164:3001/getAddress", postData)
 	return address
 }
 
@@ -57,7 +57,7 @@ func GetBalance(address string, currency string) string {
 		"address":  {address},
 		"currency": {currency},
 	}
-	balance := post("http://51.144.105.164:3001/getBalance", postData)
+	balance := Post("http://51.144.105.164:3001/getBalance", postData)
 	return balance
 }
 
@@ -89,6 +89,6 @@ func DecryptSeed(userID string, encryptedSeed string) string {
 		"userID":        {userID},
 		"encryptedSeed": {encryptedSeed},
 	}
-	seed := post("http://51.144.105.164:3001/decryptSeed", postData)
+	seed := Post("http://51.144.105.164:3001/decryptSeed", postData)
 	return seed
 }

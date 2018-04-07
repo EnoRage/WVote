@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"log"
+	"time"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -13,6 +14,16 @@ type Users struct {
 	Name          string `bson:"name"`
 	EncryptedSeed string `bson:"encryptedSeed"`
 	Address       string `bson:"address"`
+}
+
+// Votes Структура голосования
+type Votes struct {
+	num               string    `bson:"num"`
+	description       string    `bson:"description"`
+	approvedAddresses []string  `bson:"approvedAddresses"`
+	startTime         time.Time `bson:"startTime"`
+	endTime           time.Time `bson:"endTime"`
+	end               bool      `bson:"end"`
 }
 
 // ConnectToMongo mongo connection
@@ -80,5 +91,22 @@ func FindUser(openSession *mgo.Session, userid string) Users {
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
+	return results
+}
+
+// FindAllVotes Поиск всех users
+func FindAllVotes(openSession *mgo.Session) []Votes {
+	session := openSession.Copy()
+	defer CloseMongoConnection(session)
+
+	c := session.DB("unblock").C("votes")
+
+	var results []Votes
+	err := c.Find(bson.M{}).All(&results)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	return results
 }
