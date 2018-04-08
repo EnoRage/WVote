@@ -157,6 +157,12 @@ function findAllVotes(callback) {
     })
 }
 
+function findAllVoters(callback) {
+    Voters.find({} , (err,doc) => {
+        callback(doc);
+    })
+}
+
 module.exports.addOrganisation = addOrganisation;
 module.exports.findApprovedAddresses = findApprovedAddresses;
 module.exports.findApprovedAddressesInAll = findApprovedAddressesInAll;

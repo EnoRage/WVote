@@ -94,10 +94,18 @@ app.post('/totalVotes', (req, res) => {
     }    
 });
 
-// Проголосовать
+// Найти все голосования
 app.post('/findAllVotes', (req, res) => {
     let data = req.body;
     db.findAllVotes((votesArray) => {
+        res.send(votesArray);
+    });
+});
+
+// Найти всех голосующих
+app.post('/findAllVotes', (req, res) => {
+    let data = req.body;
+    db.findAllVoters((votesArray) => {
         res.send(votesArray);
     });
 });
