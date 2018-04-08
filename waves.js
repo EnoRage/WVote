@@ -101,7 +101,6 @@ function sendTx(address, currency, amount, userID, encryptedSeed, validatorEncrS
                 var vote = decodeAttechment.substr(1, 1);
                 var voteNum = decodeAttechment.substring(2);
                 sendDataTx('validator',validatorEncrSeed, voteNum, vote)
-                decodeAttechment
 
                 callback('200');
             })
