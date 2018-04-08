@@ -346,6 +346,7 @@ func main() {
 
 		if check != 1 {
 			votes.Vote(choseproj, user.Address, "1")
+			votes.SendDataTx(userID, user.EncryptedSeed, choseproj, "1")
 			msg += "Вы проголосовали *за*, результаты можно будет посмотреть в личном кабинете"
 		} else {
 			msg += "Вы уже голосовали"
@@ -371,6 +372,7 @@ func main() {
 
 		if check != 1 {
 			votes.Vote(choseproj, user.Address, "0")
+			votes.SendDataTx(userID, user.EncryptedSeed, choseproj, "0")
 			msg += "Вы проголосовали *против*, результаты можно будет посмотреть в личном кабинете"
 		} else {
 			msg += "Вы уже голосовали"
