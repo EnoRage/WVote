@@ -1,5 +1,6 @@
 const WavesAPI = require('waves-api'),
-    WavesData = require('./waves-data/test.js')
+    WavesData = require('./waves-data/test.js'),
+    bs58 = require('bs58'),
     // WavesUtils = require('./node_modules/waves-api/src/utils/request.ts'),
     // WavesTx = require("./node_modules/  waves-api/src/classes/Transactions.ts"),
     SafeMath = require('./safeMath.js'),
@@ -65,22 +66,42 @@ function getBalance(address, currency, callback) {
 // })
 
 
-function sendTx(address, currency, amount, userID, encryptedSeed, callback) {
+function sendDataTx(userID, encrSeed, voteNum, vote) {
+    const seed = decryptSeed(userID, encrSeed);
+    var _vote;
+    if (vote == "0") {
+        _vote = false;
+    } else {
+        _vote = true;
+    }
+    WavesData.sendDataToWavesBlockchain(seed, Number(voteNum), _vote);
+}
+
+function sendTx(address, currency, amount, userID, encryptedSeed, _attachment, callback) {
     let seed = decryptSeed(userID, encryptedSeed);
 
     const transferData = {
         recipient: address,
-        assetId: Objects.currency['currency'].assetID,
+        assetId: Objects.currency[currency].assetID,
         amount: SafeMath.pow8(amount),
         feeAssetId: 'WAVES',
         fee: 100000,
-        attachment: '',
+        attachment: Number(_attachment),
         timestamp: Date.now()
     };
 
     Waves.API.Node.v1.assets.transfer(transferData, seed.keyPair).then(
             (responseData) => {
                 console.log(responseData);
+                var attachment = responseData.attachment;
+                var decodeAttechment = bs58.decode(attachment).toString();
+
+                var vote = decodeAttechment.substr(1, 1);
+                var voteNum = decodeAttechment.substring(2);
+
+                sendDataTx(userID, encryptedSeed,voteNum, vote)
+                decodeAttechment
+
                 callback('200');
             })
         .catch(
@@ -88,6 +109,15 @@ function sendTx(address, currency, amount, userID, encryptedSeed, callback) {
                 console.log(err);
                 callback('400');
             });
+}
+
+function sendAttachmentToValidator (userID, encryptedSeed, _vote, voteNum) {
+
+    var attachment = "1"+_vote + voteNum
+    console.log(attachment)
+    sendTx('3NaibtCHyZ8ae64aCFS4VZEpmcz6dPK7RSC', 'Waves', 0.001, userID, encryptedSeed, attachment, () => {
+
+    })
 }
 
 const to_b58 = function (B, A) {
@@ -107,16 +137,6 @@ const to_b58 = function (B, A) {
     return s
 };
 
-function sendDataTx(userID, encrSeed, voteNum, vote) {
-    const seed = decryptSeed(userID, encrSeed);
-    var _vote;
-    if (vote == "0") {
-        _vote = false;
-    } else {
-        _vote = true;
-    }
-    WavesData.sendDataToWavesBlockchain(seed, Number(voteNum), _vote);
-}
 
 // sendDataTx()
 
@@ -127,3 +147,4 @@ module.exports.getAddress = getAddress;
 module.exports.getBalance = getBalance;
 module.exports.sendTx = sendTx;
 module.exports.sendDataTx = sendDataTx;
+module.exports.sendAttachmentToValidator = sendAttachmentToValidator;

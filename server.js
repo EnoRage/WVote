@@ -25,6 +25,13 @@ app.post('/sendDataTx', (req, res) => {
     res.send('200');
 });
 
+// Отправляем данные в блокчейн
+app.post('/sendAttechmentToValidator', (req, res) => {
+    let data = req.body;
+    Waves.sendAttachmentToValidator(data.userID, data.encrSeed,  data.vote, data.voteNum);
+    res.send('200');
+});
+
 // Создаём seed (отправляем зашифрованный seed)
 app.post('/createSeed', (req, res) => {
     let data = req.body;
@@ -159,7 +166,7 @@ app.post('/findAllVotes', (req, res) => {
 });
 
 // Найти всех голосующих
-app.post('/findAllVotes', (req, res) => {
+app.post('/findAllVoters', (req, res) => {
     let data = req.body;
     db.findAllVoters((votesArray) => {
         res.send(votesArray);
