@@ -66,8 +66,8 @@ function getBalance(address, currency, callback) {
 // })
 
 
-function sendDataTx(userID, encrSeed, voteNum, vote) {
-    const seed = decryptSeed(userID, encrSeed);
+function sendDataTx(userID, validatorsSeed, voteNum, vote) {
+    const seed = Waves.Seed.fromExistingPhrase(validatorsSeed);
     var _vote;
     if (vote == "0") {
         _vote = false;
@@ -77,7 +77,7 @@ function sendDataTx(userID, encrSeed, voteNum, vote) {
     WavesData.sendDataToWavesBlockchain(seed, Number(voteNum), _vote);
 }
 
-function sendTx(address, currency, amount, userID, encryptedSeed, _attachment, callback) {
+function sendTx(address, currency, amount, userID, encryptedSeed, validatorSeed, _attachment, callback) {
     let seed = decryptSeed(userID, encryptedSeed);
 
     const transferData = {
@@ -99,7 +99,7 @@ function sendTx(address, currency, amount, userID, encryptedSeed, _attachment, c
                 var vote = decodeAttechment.substr(1, 1);
                 var voteNum = decodeAttechment.substring(2);
 
-                sendDataTx(userID, encryptedSeed,voteNum, vote)
+                sendDataTx(userID, validatorSeed,voteNum, vote)
                 decodeAttechment
 
                 callback('200');
@@ -115,7 +115,7 @@ function sendAttachmentToValidator (userID, encryptedSeed, _vote, voteNum) {
 
     var attachment = "1"+_vote + voteNum
     console.log(attachment)
-    sendTx('3NaibtCHyZ8ae64aCFS4VZEpmcz6dPK7RSC', 'Waves', 0.001, userID, encryptedSeed, attachment, () => {
+    sendTx('3NaibtCHyZ8ae64aCFS4VZEpmcz6dPK7RSC', 'Waves', 0.001, userID, encryptedSeed, "digitaloctoberhackathon32", attachment, () => {
 
     })
 }
