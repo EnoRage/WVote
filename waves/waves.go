@@ -11,7 +11,8 @@ import (
 )
 
 // var serverIP string = "51.144.105.164"
-var serverIP string = "localhost"
+// var serverIP string = "localhost"
+var serverIP string = "rosum.westeurope.cloudapp.azure.com"
 
 // Post Пост запрос с параметрами в тело
 func Post(url1 string, data url.Values) string {

@@ -48,9 +48,9 @@ func main() {
 	createVote := tb.ReplyButton{Text: "🔖 Создать личное голосование"}
 	mainMenu := [][]tb.ReplyButton{{mainData}, {votingData}, {createVote}}
 
-	viewRes := tb.InlineButton{Unique: "viewres", Text: "Посмотреть, где я голосовал"}
-	viewMy := tb.InlineButton{Unique: "viewMy", Text: "Созданные мной голосования"}
-	viewMenu := [][]tb.InlineButton{{viewRes}, {viewMy}}
+	viewRes := tb.InlineButton{Unique: "viewres", Text: "Посмотреть результаты"}
+	// viewMy := tb.InlineButton{Unique: "viewMy", Text: "Созданные мной голосования"}
+	viewMenu := [][]tb.InlineButton{{viewRes}}
 
 	// listVote1 := tb.InlineButton{Unique: "listvote1", Text: "Страница 1"}
 	// listVote2 := tb.InlineButton{Unique: "listvote2", Text: "Страница 2"}
@@ -128,7 +128,24 @@ func main() {
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: viewMenu})
 	})
 	b.Handle(&viewRes, func(c *tb.Callback) {
-		b.Edit(c.Message, &tb.SendOptions{ParseMode: "Markdown"}, "Тут вы можете посмотреть куда и как вы голосовали, а также узнать результат")
+		var msg = "Тут вы можете посмотреть куда и как вы голосовали, а также узнать результат\n\n"
+		votes := mongo.FindAllVotes(session)
+		for key := range votes {
+			currentVote := mongo.FindAllVotersByNum(session, votes[key].Num)
+			msg += "*Голосование:* " + votes[key].Description + "\n"
+			countYes := 0
+			countNo := 1
+			for index := range currentVote {
+				if currentVote[index].Vote == true {
+					countYes++
+				} else {
+					countNo++
+				}
+			}
+			msg += "*Голосов за:* " + strconv.Itoa(countYes) + "\n"
+			msg += "*Голосов против:* " + strconv.Itoa(countNo) + "\n\n"
+		}
+		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"})
 		b.Respond(c, &tb.CallbackResponse{})
 	})
 	b.Handle(&votingData, func(m *tb.Message) {
@@ -394,28 +411,28 @@ func main() {
 		b.Send(c.Sender, "Главное меню", &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{ResizeReplyKeyboard: true, ReplyKeyboard: mainMenu})
 		b.Respond(c, &tb.CallbackResponse{})
 	})
-	b.Handle(&viewRes, func(c *tb.Callback) {
-		var msg = "Список организаций, куда в проголосовали:\n\n"
-		msg += "Организация: 1\n\n"
-		msg += "Ваш голос: да\n\n"
-		msg += "Тема голосования: 1\n\n"
+	// b.Handle(&viewRes, func(c *tb.Callback) {
+	// 	var msg = "Список организаций, куда в проголосовали:\n\n"
+	// 	msg += "Организация: 1\n\n"
+	// 	msg += "Ваш голос: да\n\n"
+	// 	msg += "Тема голосования: 1\n\n"
 
-		msg += "Завершен: да\n\n"
-		msg += "Результат: 70 за и 30 против\n\n"
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"})
+	// 	msg += "Завершен: да\n\n"
+	// 	msg += "Результат: 70 за и 30 против\n\n"
+	// 	b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"})
 
-		var msg2 = "Ваш публичный адрес: "
-		// msg += addressPub
-		msg2 += "\n\nВаш seed: "
-		// msg += seed
-		msg2 += "\n\nВаш баланс: "
-		// msg += balance
-		msg2 += " (РУБ)"
-		msg2 += "\n\nТут вы можете посмотреть результаты прошлых голосований"
+	// 	var msg2 = "Ваш публичный адрес: "
+	// 	// msg += addressPub
+	// 	msg2 += "\n\nВаш seed: "
+	// 	// msg += seed
+	// 	msg2 += "\n\nВаш баланс: "
+	// 	// msg += balance
+	// 	msg2 += " (РУБ)"
+	// 	msg2 += "\n\nТут вы можете посмотреть результаты прошлых голосований"
 
-		b.Send(c.Sender, msg2, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: viewMenu})
-		b.Respond(c, &tb.CallbackResponse{})
-	})
+	// 	b.Send(c.Sender, msg2, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: viewMenu})
+	// 	b.Respond(c, &tb.CallbackResponse{})
+	// })
 	b.Handle(&createVote, func(m *tb.Message) {
 		var msg = "На текущий момент поддерживаются лишь голосования типа: да / нет:\n\n"
 		msg += "На какую тематику будет ваше голосование? (Опишите о чем будет голосование, чтобы участники могли ответить либо да, либо нет"
@@ -465,26 +482,26 @@ func main() {
 		enterName = false
 		b.Send(m.Sender, "Главное меню", &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{ResizeReplyKeyboard: true, ReplyKeyboard: mainMenu})
 	})
-	b.Handle(&viewMy, func(c *tb.Callback) {
-		var msg = "Список созданных вами голосований: \n\n"
-		msg += "Голосование 1\n"
-		msg += "Тематика: \n"
-		msg += "Сколько времени до конца: \n"
-		msg += "Завершен: нет\n"
-		msg += "Результаты: "
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"})
-		var msg2 = "Ваш публичный адрес: "
-		// msg += addressPub
-		msg2 += "\n\nВаш seed: "
-		// msg += seed
-		msg2 += "\n\nВаш баланс: "
-		// msg += balance
-		msg2 += " (РУБ)"
-		msg2 += "\n\nТут вы можете посмотреть результаты прошлых голосований"
+	// b.Handle(&viewMy, func(c *tb.Callback) {
+	// 	var msg = "Список созданных вами голосований: \n\n"
+	// 	msg += "Голосование 1\n"
+	// 	msg += "Тематика: \n"
+	// 	msg += "Сколько времени до конца: \n"
+	// 	msg += "Завершен: нет\n"
+	// 	msg += "Результаты: "
+	// 	b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"})
+	// 	var msg2 = "Ваш публичный адрес: "
+	// 	// msg += addressPub
+	// 	msg2 += "\n\nВаш seed: "
+	// 	// msg += seed
+	// 	msg2 += "\n\nВаш баланс: "
+	// 	// msg += balance
+	// 	msg2 += " (РУБ)"
+	// 	msg2 += "\n\nТут вы можете посмотреть результаты прошлых голосований"
 
-		b.Send(c.Sender, msg2, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: viewMenu})
-		b.Respond(c, &tb.CallbackResponse{})
-	})
+	// 	b.Send(c.Sender, msg2, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: viewMenu})
+	// 	b.Respond(c, &tb.CallbackResponse{})
+	// })
 
 	b.Start()
 	// Обработчики на главное меню

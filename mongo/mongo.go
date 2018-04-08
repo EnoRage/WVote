@@ -118,7 +118,7 @@ func FindUserByAddress(openSession *mgo.Session, address string) Users {
 	return results
 }
 
-// FindAllVotes Поиск всех users
+// FindAllVotes Поиск всех голосований
 func FindAllVotes(openSession *mgo.Session) []Votes {
 	session := openSession.Copy()
 	defer CloseMongoConnection(session)
@@ -161,6 +161,23 @@ func FindAllVoters(openSession *mgo.Session) []Voters {
 
 	var results []Voters
 	err := c.Find(bson.M{}).All(&results)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return results
+}
+
+// FindAllVotersByNum Поиск всех голосующих по номеру
+func FindAllVotersByNum(openSession *mgo.Session, num int) []Voters {
+	session := openSession.Copy()
+	defer CloseMongoConnection(session)
+
+	c := session.DB("unblock").C("voters")
+
+	var results []Voters
+	err := c.Find(bson.M{"num": num}).All(&results)
 
 	if err != nil {
 		log.Fatal(err)

@@ -7,7 +7,8 @@ import (
 )
 
 // var serverIP string = "51.144.105.164"
-var serverIP string = "localhost"
+// var serverIP string = "localhost"
+var serverIP string = "rosum.westeurope.cloudapp.azure.com"
 
 // CreateVote создание голосование
 func CreateVote(userID string, description string, endTime string) string {
