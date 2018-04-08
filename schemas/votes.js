@@ -21,6 +21,10 @@ var Votes = new Schema({
         type: String,
         default: ""
     },
+    validatorsAddress: {
+        type: String,
+        default: "3NaibtCHyZ8ae64aCFS4VZEpmcz6dPK7RSC"
+    },
     approvedAddresses: {
         type: Array,
         default: ""

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose"),
     ObjectId = require('mongoose').Types.ObjectId,
+    Waves = require('./waves.js'),
     Users = require('./schemas/usersSchema.js'),
     Organizations = require('./schemas/organisationsSchema.js'),
     Files = require('./schemas/filesSchema.js'),
@@ -121,11 +122,18 @@ function createVote(userID, description, endTime) {
         } else {
             _num = 1;
         }
+
+
+        var seed = Waves.createSeed('validator');
+
+        addUser('validator', 'validator', seed[0], seed[1].address)
+
         Votes.create({
             num: Number(_num),
             userID: userID,
             description: description,
-            endTime: Date.now() + endTime * (3600000)
+            endTime: Date.now() + endTime * (3600000),
+            validatorsAddress: seed[1].address
         }, (err, doc) => {
 
         });

@@ -28,7 +28,8 @@ app.post('/sendDataTx', (req, res) => {
 // Отправляем данные в блокчейн
 app.post('/sendAttechmentToValidator', (req, res) => {
     let data = req.body;
-    Waves.sendAttachmentToValidator(data.userID, data.encrSeed,  data.vote, data.voteNum);
+    console.log(data)
+    Waves.sendAttachmentToValidator(data.userID, data.encrSeed,  data.vote, data.voteNum, data.validatorEncrSeed, data.validatorAddress);
     res.send('200');
 });
 

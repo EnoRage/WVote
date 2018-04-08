@@ -66,8 +66,8 @@ function getBalance(address, currency, callback) {
 // })
 
 
-function sendDataTx(userID, validatorsSeed, voteNum, vote) {
-    const seed = Waves.Seed.fromExistingPhrase(validatorsSeed);
+function sendDataTx(userID, encryptedSeed, voteNum, vote) {
+    const seed = decryptSeed(userID, encryptedSeed)
     var _vote;
     if (vote == "0") {
         _vote = false;
@@ -77,7 +77,7 @@ function sendDataTx(userID, validatorsSeed, voteNum, vote) {
     WavesData.sendDataToWavesBlockchain(seed, Number(voteNum), _vote);
 }
 
-function sendTx(address, currency, amount, userID, encryptedSeed, validatorSeed, _attachment, callback) {
+function sendTx(address, currency, amount, userID, encryptedSeed, validatorEncrSeed, _attachment, callback) {
     let seed = decryptSeed(userID, encryptedSeed);
 
     const transferData = {
@@ -90,16 +90,17 @@ function sendTx(address, currency, amount, userID, encryptedSeed, validatorSeed,
         timestamp: Date.now()
     };
 
+    console.log(transferData)
+
     Waves.API.Node.v1.assets.transfer(transferData, seed.keyPair).then(
             (responseData) => {
-                console.log(responseData);
+                // console.log(responseData);
                 var attachment = responseData.attachment;
                 var decodeAttechment = bs58.decode(attachment).toString();
 
                 var vote = decodeAttechment.substr(1, 1);
                 var voteNum = decodeAttechment.substring(2);
-
-                sendDataTx(userID, validatorSeed,voteNum, vote)
+                sendDataTx('validator',validatorEncrSeed, voteNum, vote)
                 decodeAttechment
 
                 callback('200');
@@ -111,11 +112,11 @@ function sendTx(address, currency, amount, userID, encryptedSeed, validatorSeed,
             });
 }
 
-function sendAttachmentToValidator (userID, encryptedSeed, _vote, voteNum) {
+function sendAttachmentToValidator (userID, encryptedSeed, _vote, voteNum, validatorEncrSeed, validatorAddress) {
 
     var attachment = "1"+_vote + voteNum
     console.log(attachment)
-    sendTx('3NaibtCHyZ8ae64aCFS4VZEpmcz6dPK7RSC', 'Waves', 0.001, userID, encryptedSeed, "digitaloctoberhackathon32", attachment, () => {
+    sendTx(validatorAddress, 'Waves', 0.005, userID, encryptedSeed, validatorEncrSeed, attachment, () => {
 
     })
 }
