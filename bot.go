@@ -134,7 +134,7 @@ func main() {
 			currentVote := mongo.FindAllVotersByNum(session, votes[key].Num)
 			msg += "*Голосование:* " + votes[key].Description + "\n"
 			countYes := 0
-			countNo := 1
+			countNo := 0
 			for index := range currentVote {
 				if currentVote[index].Vote == true {
 					countYes++
