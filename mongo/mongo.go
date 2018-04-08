@@ -16,9 +16,16 @@ type Users struct {
 	Address       string `bson:"address"`
 }
 
-// Votes Структура голосования
+// Voters Структура голосующих
+type Voters struct {
+	Num     int    `bson:"num"`
+	Address string `bson:"address"`
+	Vote    bool   `bson:"vote"`
+}
+
+// Votes Структура голосующих
 type Votes struct {
-	Num               string    `bson:"num"`
+	Num               int       `bson:"num"`
 	Description       string    `bson:"description"`
 	ApprovedAddresses []string  `bson:"approvedAddresses"`
 	StartTime         time.Time `bson:"startTime"`
@@ -102,6 +109,23 @@ func FindAllVotes(openSession *mgo.Session) []Votes {
 	c := session.DB("unblock").C("votes")
 
 	var results []Votes
+	err := c.Find(bson.M{}).All(&results)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return results
+}
+
+// FindAllVoters Поиск всех users
+func FindAllVoters(openSession *mgo.Session) []Voters {
+	session := openSession.Copy()
+	defer CloseMongoConnection(session)
+
+	c := session.DB("unblock").C("voters")
+
+	var results []Voters
 	err := c.Find(bson.M{}).All(&results)
 
 	if err != nil {
