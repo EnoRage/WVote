@@ -30,20 +30,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Xam.Plugin.Connectivity" Version="3.1.1" />
     <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="WavesCS">
-      <HintPath>..\..\..\Downloads\WavesCS.dll</HintPath>
-    </Reference>
-    <Reference Include="Blake2Sharp">
-      <HintPath>..\..\..\Downloads\Blake2Sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="curve25519">
-      <HintPath>..\..\..\Downloads\curve25519.dll</HintPath>
-    </Reference>
-    <Reference Include="HashLib">
-      <HintPath>..\..\..\Downloads\HashLib.dll</HintPath>
-    </Reference>
+    <PackageReference Include="PCLCrypto" Version="2.0.147" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="UI\Pages\MainBurger\" />
@@ -56,5 +43,6 @@
     <Folder Include="UI\Pages\Settings\" />
     <Folder Include="BL\ViewModels\Auth\" />
     <Folder Include="BL\ViewModels\Settings\" />
+    <Folder Include="Weaves\" />
   </ItemGroup>
 </Project>

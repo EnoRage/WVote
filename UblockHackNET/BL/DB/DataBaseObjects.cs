@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BlockChainNET.BL.DB
+namespace UnblockHackNET.BL.DB
 {
     public class FoundationOptions
     {
