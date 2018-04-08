@@ -23,7 +23,7 @@ func CreateVote(userID string, description string, endTime string) string {
 	return body
 }
 
-// SendDataTx создание голосование
+// SendDataTx отправление транзакции с данными
 func SendDataTx(userID string, encrSeed string, voteNum string, vote string) string {
 	data := url.Values{
 		"userID":   {userID},
@@ -38,13 +38,15 @@ func SendDataTx(userID string, encrSeed string, voteNum string, vote string) str
 	return body
 }
 
-// SendDataTx создание голосование
-func SendAttechmentTxToValidator(userID string, encrSeed string, voteNum string, vote string) string {
+// SendAttechmentTxToValidator отправление транзакции с атачментом и там уже транзакция с данными от валидатора
+func SendAttechmentTxToValidator(userID string, encrSeed string, voteNum string, vote string, validatorEncrSeed string, validatorAddress string) string {
 	data := url.Values{
-		"userID":   {userID},
-		"encrSeed": {encrSeed},
-		"voteNum":  {voteNum},
-		"vote":     {vote},
+		"userID":            {userID},
+		"encrSeed":          {encrSeed},
+		"voteNum":           {voteNum},
+		"vote":              {vote},
+		"validatorEncrSeed": {validatorEncrSeed},
+		"validatorAddress":  {validatorAddress},
 	}
 	url1 := "http://" + serverIP + ":3001/sendAttechmentToValidator"
 

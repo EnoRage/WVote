@@ -31,8 +31,8 @@ var golosData = ""
 
 func main() {
 	b, err := tb.NewBot(tb.Settings{
-		Token: "586866387:AAHmxTxHOUxZyjhauJ3yxedpPTWUpNxLUQE", // t.me/waves_vote_bot  для Никиты
-		// Token:  "595106358:AAFyY_w1SNHReDF2j9eQQjhNHBIhElDU_QY", // t.me/test_waves_vote_bot для Кирилла
+		// Token: "586866387:AAHmxTxHOUxZyjhauJ3yxedpPTWUpNxLUQE", // t.me/waves_vote_bot  для Никиты
+		Token:  "595106358:AAFyY_w1SNHReDF2j9eQQjhNHBIhElDU_QY", // t.me/test_waves_vote_bot для Кирилла
 		Poller: &tb.LongPoller{Timeout: 10 * time.Second},
 	})
 
@@ -347,7 +347,9 @@ func main() {
 		if check != 1 {
 			votes.Vote(choseproj, user.Address, "1")
 			// votes.SendDataTx(userID, user.EncryptedSeed, choseproj, "1")
-			votes.SendAttechmentTxToValidator(userID, user.EncryptedSeed, choseproj, "1")
+			vote111 := mongo.FindVoteByNum(session, num)
+			user1 := mongo.FindUserByAddress(session, vote111.ValidatorsAddress)
+			votes.SendAttechmentTxToValidator(userID, user.EncryptedSeed, choseproj, "1", user1.EncryptedSeed, vote111.ValidatorsAddress)
 			msg += "Вы проголосовали *за*, результаты можно будет посмотреть в личном кабинете"
 		} else {
 			msg += "Вы уже голосовали"
@@ -374,7 +376,9 @@ func main() {
 		if check != 1 {
 			votes.Vote(choseproj, user.Address, "0")
 			// votes.SendDataTx(userID, user.EncryptedSeed, choseproj, "0")
-			votes.SendAttechmentTxToValidator(userID, user.EncryptedSeed, choseproj, "0")
+			vote111 := mongo.FindVoteByNum(session, num)
+			user1 := mongo.FindUserByAddress(session, vote111.ValidatorsAddress)
+			votes.SendAttechmentTxToValidator(userID, user.EncryptedSeed, choseproj, "0", user1.EncryptedSeed, vote111.ValidatorsAddress)
 			msg += "Вы проголосовали *против*, результаты можно будет посмотреть в личном кабинете"
 		} else {
 			msg += "Вы уже голосовали"

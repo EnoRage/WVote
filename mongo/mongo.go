@@ -31,6 +31,7 @@ type Votes struct {
 	StartTime         time.Time `bson:"startTime"`
 	EndTime           time.Time `bson:"endTime"`
 	End               bool      `bson:"end"`
+	ValidatorsAddress string    `bson:"validatorsAddress"`
 }
 
 // ConnectToMongo mongo connection
@@ -101,6 +102,22 @@ func FindUser(openSession *mgo.Session, userid string) Users {
 	return results
 }
 
+// FindUserByAddress Поиск конкретного пользователя по адресу
+func FindUserByAddress(openSession *mgo.Session, address string) Users {
+	session := openSession.Copy()
+	defer CloseMongoConnection(session)
+
+	c := session.DB("unblock").C("users")
+
+	var results Users
+	c.Find(bson.M{"address": address}).One(&results)
+
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	return results
+}
+
 // FindAllVotes Поиск всех users
 func FindAllVotes(openSession *mgo.Session) []Votes {
 	session := openSession.Copy()
@@ -110,6 +127,23 @@ func FindAllVotes(openSession *mgo.Session) []Votes {
 
 	var results []Votes
 	err := c.Find(bson.M{}).All(&results)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return results
+}
+
+// FindVoteByNum находит конкретное голосование
+func FindVoteByNum(openSession *mgo.Session, num int) Votes {
+	session := openSession.Copy()
+	defer CloseMongoConnection(session)
+
+	c := session.DB("unblock").C("votes")
+
+	var results Votes
+	err := c.Find(bson.M{"num": num}).One(&results)
 
 	if err != nil {
 		log.Fatal(err)
