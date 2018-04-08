@@ -4,7 +4,44 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="UnblockHackNET.UI.Pages.CurrentVotings.CurrentVotingsPage"
     xmlns:pages="clr-namespace:UnblockHackNET.UI.Pages">
-    <StackLayout>
-        <Label Text="CurrentVotings"></Label>
-    </StackLayout>
+    <ListView
+        VerticalOptions="FillAndExpand"
+        HorizontalOptions="FillAndExpand"
+        Margin="10,10,10,0"
+        HasUnevenRows="true"
+        IsPullToRefreshEnabled="true"
+        RefreshCommand="{Binding RefreshCommand}"
+        ItemsSource="{Binding RefreshChartItemSource}"
+        IsRefreshing="{Binding IsRefreshing}">
+        <ListView.Header>
+            <StackLayout
+                Margin="10,20,10,0">
+                <Label
+                    Text="Открытые голосования"
+                    HorizontalOptions="CenterAndExpand"
+                    HeightRequest="90">
+                </Label>
+            </StackLayout>
+        </ListView.Header>
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <StackLayout
+                        VerticalOptions="CenterAndExpand"
+                        HorizontalOptions="CenterAndExpand"
+                        Orientation="Vertical"
+                        Spacing="10">
+                        <Label
+                            VerticalTextAlignment="Center"
+                            Text="{Binding description}">
+                        </Label>
+                        <Label
+                            VerticalTextAlignment="Center"
+                            Text="{Binding startTime}">
+                        </Label>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
 </pages:BasePage>

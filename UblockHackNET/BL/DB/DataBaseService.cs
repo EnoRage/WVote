@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -11,7 +13,7 @@ namespace UnblockHackNET.BL.DB
     {
         private static string _apiUri = "http://rosum.westeurope.cloudapp.azure.com:3001/";
 
-        public static async Task<List<string>> CreateSeed(string log)
+        public static async Task<List<string>> CreateSeed(string pass)
         {
             var result = new List<string>();
             using (var client = new HttpClient())
@@ -24,7 +26,7 @@ namespace UnblockHackNET.BL.DB
 
                 //request.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
                 List<KeyValuePair<string, string>> tmp = new List<KeyValuePair<string, string>>();
-                tmp.Add(new KeyValuePair<string, string>("userID", log));
+                tmp.Add(new KeyValuePair<string, string>("userID", pass));
 
                 request.Content = new FormUrlEncodedContent(tmp);
                 var response = await client.SendAsync(request);
@@ -37,6 +39,70 @@ namespace UnblockHackNET.BL.DB
                 }
             }
 
+
+            return result;
+        }
+
+        public static async Task<List<string>> DecryptSeed(List<string> log, string pass)
+        {
+            //decryptSeed
+            var result = new List<string>();
+            using (var client = new HttpClient())
+            {
+                var request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(_apiUri + "decryptSeed"),
+                    Method = HttpMethod.Post
+                };
+
+                //request.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+                List<KeyValuePair<string, string>> tmp = new List<KeyValuePair<string, string>>();
+                StringBuilder builder = new StringBuilder();
+
+                foreach (var item in log)
+                {
+                    builder.Append(item + " ");
+                }
+
+                tmp.Add(new KeyValuePair<string, string>("userID", pass));
+                tmp.Add(new KeyValuePair<string, string>("encryptedSeed", builder.ToString()));
+
+                request.Content = new FormUrlEncodedContent(tmp);
+                var response = await client.SendAsync(request);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var myObj = json.Split();
+                    if (!Equals(myObj, null))
+                        result.AddRange(myObj);
+                }
+            }
+
+
+            return result;        
+        }
+
+        public static async Task<ObservableCollection<Vote>> GetAllVotes()
+        {
+            var result = new ObservableCollection<Vote>();
+            using (var client = new HttpClient())
+            {
+                var request = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(_apiUri + $"findAllVotes"),
+                    Method = HttpMethod.Post
+                };
+
+                request.Headers.Add("Accept", "application/json");
+                var response = await client.SendAsync(request);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var myObj = JsonConvert.DeserializeObject<ObservableCollection<Vote>>(json);
+                    if (!Equals(myObj, null))
+                        result = myObj;
+                }
+            }
 
             return result;
         }

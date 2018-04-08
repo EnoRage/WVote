@@ -20,16 +20,25 @@ namespace UnblockHackNET.BL.DB
 
     public class User
     {
-        public string Id { get; set; }
-
-        public string Name { get; set; } = "";
-
         public string EthPrvKey { get; set; } = "";
 
         public string EthAddress { get; set; } = "";
 
-        public List<Tuple<string, string, string, string>> Foundations { get; set; }
-            = new List<Tuple<string, string, string, string>>();
+        public string EncryptedSeed { get; set; }
+    }
+
+    public class Vote
+    {
+        public string description { get; set; } = "";
+
+        public List<string> approvedAddresses { get; set; } = new List<string>();
+
+        public DateTime startTime { get; set; } = DateTime.MinValue;
+        public DateTime endTime { get; set; } = DateTime.MinValue;
+        public bool end { get; set; } = false;
+        public string _id { get; set; } = "";
+        public string valisatorsAddress { get; set; } = "";
+        public int num { get; set; } = 0;
     }
 
     public class TransactionHistory

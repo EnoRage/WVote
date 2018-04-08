@@ -4,10 +4,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="UnblockHackNET.UI.Pages.Auth.AuthPage"
     xmlns:pages="clr-namespace:UnblockHackNET.UI.Pages">
-    <StackLayout>
+    <StackLayout
+        Margin="10,20,10,0"
+        VerticalOptions="Center"
+        Spacing="20">
+        <Entry
+            Keyboard="Numeric"
+            FontSize="Medium"
+            Text="{Binding EntryText}">
+        </Entry>
         <Label
             Text="CurrentVotings">
         </Label>
-        <Button Text="Auth" Command="{Binding AuthCommand}"></Button>
+        <Button
+            Text="Войти"
+            Command="{Binding AuthCommand}">
+        </Button>
     </StackLayout>
 </pages:BasePage>
