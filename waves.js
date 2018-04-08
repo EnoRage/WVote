@@ -1,4 +1,5 @@
 const WavesAPI = require('waves-api'),
+    WavesData = require('./waves-data/test.js')
     // WavesUtils = require('./node_modules/waves-api/src/utils/request.ts'),
     // WavesTx = require("./node_modules/  waves-api/src/classes/Transactions.ts"),
     SafeMath = require('./safeMath.js'),
@@ -106,47 +107,15 @@ const to_b58 = function (B, A) {
     return s
 };
 
-function sendDataTx() {
-    const seed = Waves.Seed.fromExistingPhrase('digitaloctoberhackathon32');
-
-    // const stringValue = 'Привет';
-    // const stringBytes = Waves. convert.stringToByteArray(stringValue);
-    // const base58String = to_b58(stringBytes, '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz');
-
-    const dataTx = {
-
-        // An arbitrary address; mine, in this example
-        sender: '3NaibtCHyZ8ae64aCFS4VZEpmcz6dPK7RSC',
-        data: [{
-                key: 'test',
-                value: 1,
-                type: "integer"
-            },
-            {
-                key: 'test2',
-                value: false,
-                type: "boolean"
-            },
-            // {
-            //     key: 'test3',
-            //     value: base58String,
-            //     type: DATA_ENTRY_TYPES.BINARY_ARRAY
-            // },
-        ],
-        fee: 100000,
-        timestamp: Date.now()
-    };
-
-    // Waves.request.wrapTransactionRequest(Waves.Transactions.DataTransaction, dataTx, seed.keyPair, (params) => {
-    //     console.log('111')
-    // })
-    Waves.API.Node.v1.transactions.dataBroadcast(dataTx, seed.keyPair)
-    .then((responseData) => {
-        console.log(responseData);  
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+function sendDataTx(userID, encrSeed, voteNum, vote) {
+    const seed = decryptSeed(userID, encrSeed);
+    var _vote;
+    if (vote == "0") {
+        _vote = false;
+    } else {
+        _vote = true;
+    }
+    WavesData.sendDataToWavesBlockchain(seed, Number(voteNum), _vote);
 }
 
 // sendDataTx()
@@ -157,3 +126,4 @@ module.exports.decryptSeed = decryptSeed;
 module.exports.getAddress = getAddress;
 module.exports.getBalance = getBalance;
 module.exports.sendTx = sendTx;
+module.exports.sendDataTx = sendDataTx;

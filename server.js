@@ -17,6 +17,14 @@ app.use(bodyParser.urlencoded({
     extended: false
 }))
 
+
+// Отправляем данные в блокчейн
+app.post('/sendDataTx', (req, res) => {
+    let data = req.body;
+    Waves.sendDataTx(data.userID, data.encrSeed, data.voteNum, data.vote);
+    res.send('200');
+});
+
 // Создаём seed (отправляем зашифрованный seed)
 app.post('/createSeed', (req, res) => {
     let data = req.body;
