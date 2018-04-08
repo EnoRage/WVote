@@ -5,7 +5,7 @@
     - UnblockHackNET - Shared Logic Project
     - UnblockHackMobile.Droid - Native 
     - Xamarin.Android Project
-  UnblockHackMobile.iOS - Native Xamarin.IOS Project
+    - UnblockHackMobile.iOS - Native Xamarin.IOS Project
   
 - ## Shared Logic:
     - BL - Business logic:
