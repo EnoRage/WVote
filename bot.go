@@ -49,22 +49,22 @@ func main() {
 	viewMy := tb.InlineButton{Unique: "viewMy", Text: "Созданные мной голосования"}
 	viewMenu := [][]tb.InlineButton{{viewRes}, {viewMy}}
 
-	listVote1 := tb.InlineButton{Unique: "listvote1", Text: "Страница 1"}
-	listVote2 := tb.InlineButton{Unique: "listvote2", Text: "Страница 2"}
-	listVote3 := tb.InlineButton{Unique: "listvote3", Text: "Страница 3"}
-	listVote4 := tb.InlineButton{Unique: "listvote4", Text: "Страница 4"}
+	// listVote1 := tb.InlineButton{Unique: "listvote1", Text: "Страница 1"}
+	// listVote2 := tb.InlineButton{Unique: "listvote2", Text: "Страница 2"}
+	// listVote3 := tb.InlineButton{Unique: "listvote3", Text: "Страница 3"}
+	// listVote4 := tb.InlineButton{Unique: "listvote4", Text: "Страница 4"}
 
-	vote1 := tb.InlineButton{Unique: "vote1", Text: "Проголосовать за 1"}
-	vote2 := tb.InlineButton{Unique: "vote2", Text: "Проголосовать за 2"}
-	vote3 := tb.InlineButton{Unique: "vote3", Text: "Проголосовать за 3"}
-	vote4 := tb.InlineButton{Unique: "vote4", Text: "Проголосовать за 4"}
+	// vote1 := tb.InlineButton{Unique: "vote1", Text: "Проголосовать за 1"}
+	// vote2 := tb.InlineButton{Unique: "vote2", Text: "Проголосовать за 2"}
+	// vote3 := tb.InlineButton{Unique: "vote3", Text: "Проголосовать за 3"}
+	// vote4 := tb.InlineButton{Unique: "vote4", Text: "Проголосовать за 4"}
 
 	menu := tb.InlineButton{Unique: "menu", Text: "Главное меню"}
 
-	menuVote1 := [][]tb.InlineButton{{vote1}, {listVote2, listVote3, listVote4}, {menu}}
-	menuVote2 := [][]tb.InlineButton{{vote2}, {listVote1, listVote3, listVote4}, {menu}}
-	menuVote3 := [][]tb.InlineButton{{vote3}, {listVote1, listVote2, listVote4}, {menu}}
-	menuVote4 := [][]tb.InlineButton{{vote4}, {listVote1, listVote2, listVote3}, {menu}}
+	// menuVote1 := [][]tb.InlineButton{{vote1}, {listVote2, listVote3, listVote4}, {menu}}
+	// menuVote2 := [][]tb.InlineButton{{vote2}, {listVote1, listVote3, listVote4}, {menu}}
+	// menuVote3 := [][]tb.InlineButton{{vote3}, {listVote1, listVote2, listVote4}, {menu}}
+	// menuVote4 := [][]tb.InlineButton{{vote4}, {listVote1, listVote2, listVote3}, {menu}}
 
 	yes := tb.InlineButton{Unique: "yes", Text: "✅ За"}
 	no := tb.InlineButton{Unique: "no", Text: "❌ Против"}
@@ -129,58 +129,53 @@ func main() {
 		b.Respond(c, &tb.CallbackResponse{})
 	})
 	b.Handle(&votingData, func(m *tb.Message) {
-		var msg = "Страница 1:\n\n"
-		msg += proj1
-		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: menuVote1})
+		var msg = "Список всех голосований:\n\n"
+		msg += "*Чтобы проголосовать* нажмите на /голосование"
+		msg += "\n\nОписание: "
+		msg += "  /vote0"
+
+		msg += "\n\nОписание: "
+		msg += "  /vote1"
+
+		msg += "\n\nОписание: "
+		msg += "  /vote2"
+
+		msg += "\n\nОписание: "
+		msg += "  /vote3"
+
+		msg += "\n\nОписание: "
+		msg += "  /vote4"
+
+		msg += "\n\nОписание: "
+		msg += "  /vote5"
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"})
 	})
-	b.Handle(&listVote1, func(c *tb.Callback) {
-		var msg = "Страница 1:\n\n"
-		msg += proj1
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: menuVote1})
-		b.Respond(c, &tb.CallbackResponse{})
+	b.Handle("/vote0", func(m *tb.Message) {
+		choseproj = "vote0"
+		var msg = "Подробное сообщение"
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
-	b.Handle(&listVote2, func(c *tb.Callback) {
-		var msg = "Страница 2:\n\n"
-		msg += proj2
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: menuVote2})
-		b.Respond(c, &tb.CallbackResponse{})
+	b.Handle("/vote1", func(m *tb.Message) {
+		choseproj = "vote1"
+		var msg = "Подробное сообщение"
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
-	b.Handle(&listVote3, func(c *tb.Callback) {
-		var msg = "Страница 3:\n\n"
-		msg += proj3
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: menuVote3})
-		b.Respond(c, &tb.CallbackResponse{})
+	b.Handle("/vote2", func(m *tb.Message) {
+		choseproj = "vote2"
+		var msg = "Подробное сообщение"
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
-	b.Handle(&listVote4, func(c *tb.Callback) {
-		var msg = "Страница 4:\n\n"
-		msg += proj4
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: menuVote4})
-		b.Respond(c, &tb.CallbackResponse{})
+	b.Handle("/vote3", func(m *tb.Message) {
+		choseproj = "vote3"
+		var msg = "Подробное сообщение"
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
-	b.Handle(&vote1, func(c *tb.Callback) {
-		var msg = "Вы за или против?\n\n"
-		choseproj = proj1
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
-		b.Respond(c, &tb.CallbackResponse{})
+	b.Handle("/vote4", func(m *tb.Message) {
+		choseproj = "fond4"
+		var msg = "Подробное сообщение"
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
-	b.Handle(&vote2, func(c *tb.Callback) {
-		var msg = "Вы за или против?\n\n"
-		choseproj = proj2
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
-		b.Respond(c, &tb.CallbackResponse{})
-	})
-	b.Handle(&vote3, func(c *tb.Callback) {
-		var msg = "Вы за или против?\n\n"
-		choseproj = proj3
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
-		b.Respond(c, &tb.CallbackResponse{})
-	})
-	b.Handle(&vote4, func(c *tb.Callback) {
-		var msg = "Вы за или против?\n\n"
-		choseproj = proj4
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
-		b.Respond(c, &tb.CallbackResponse{})
-	})
+
 	b.Handle(&yes, func(c *tb.Callback) {
 		yesnores = "yes"
 		var msg = "Вы проголосовали *за*, результаты можно будет посмотреть в личном кабинете"
