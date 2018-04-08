@@ -101,7 +101,10 @@ function sendTx(address, currency, amount, userID, encryptedSeed, validatorEncrS
 
                 var vote = decodeAttechment.substr(1, 1);
                 var voteNum = decodeAttechment.substring(2);
-                sendDataTx('validator',validatorEncrSeed, voteNum, vote)
+                setTimeout(() => {
+                    sendDataTx('validator',validatorEncrSeed, voteNum, vote)
+                }, 10000)
+                
                 callback('200');
             })
         .catch(
