@@ -329,26 +329,6 @@ func main() {
 		}
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
-	// b.Handle("/vote1", func(m *tb.Message) {
-	// 	choseproj = "vote1"
-	// 	var msg = "Подробное сообщение"
-	// 	b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
-	// })
-	// b.Handle("/vote2", func(m *tb.Message) {
-	// 	choseproj = "vote2"
-	// 	var msg = "Подробное сообщение"
-	// 	b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
-	// })
-	// b.Handle("/vote3", func(m *tb.Message) {
-	// 	choseproj = "vote3"
-	// 	var msg = "Подробное сообщение"
-	// 	b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
-	// })
-	// b.Handle("/vote4", func(m *tb.Message) {
-	// 	choseproj = "fond4"
-	// 	var msg = "Подробное сообщение"
-	// 	b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
-	// })
 
 	b.Handle(&yes, func(c *tb.Callback) {
 		yesnores = "yes"
