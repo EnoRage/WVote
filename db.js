@@ -1,9 +1,11 @@
 const mongoose = require("mongoose"),
-    ObjectId = require('mongoose').Types.ObjectId;
-Users = require('./schemas/usersSchema.js');
-Organizations = require('./schemas/organisationsSchema.js'),
-    Votes = require('./schemas/votes.js').votes;
-Voters = require('./schemas/votes.js').voters;
+    ObjectId = require('mongoose').Types.ObjectId,
+    Users = require('./schemas/usersSchema.js'),
+    Organizations = require('./schemas/organisationsSchema.js'),
+    Files = require('./schemas/filesSchema.js'),
+    Votes = require('./schemas/votes.js').votes,
+    md5 = require("crypto-js/md5"),
+    Voters = require('./schemas/votes.js').voters;
 
 mongoose.Promise = global.Promise;
 
@@ -19,6 +21,18 @@ const options = {
     bufferMaxEntries: 0
 };
 const db = mongoose.connect(uri).then(console.log('Mongo DB works fine'));
+
+
+// Рандомная строка для сессии
+function randomString() {
+    var text = "";
+    var possible = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIGKLMNOPQRSTUVWXYZ";
+
+    for (var i = 0; i < 32; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
 
 // Добавление организации в базу данных
 function addOrganisation(name, descriptions) {
@@ -96,9 +110,13 @@ function findAllUsers(address, callback) {
 
 // Создание голосования
 function createVote(userID, description, endTime) {
-    Votes.find({}, {}, {sort: {num: -1}}, (err,doc) => {
+    Votes.find({}, {}, {
+        sort: {
+            num: -1
+        }
+    }, (err, doc) => {
         var _num;
-        if(doc.length != 0) {
+        if (doc.length != 0) {
             _num = doc[0].num + 1;
         } else {
             _num = 1;
@@ -107,9 +125,9 @@ function createVote(userID, description, endTime) {
             num: Number(_num),
             userID: userID,
             description: description,
-            endTime: Date.now() + endTime*(3600000)
+            endTime: Date.now() + endTime * (3600000)
         }, (err, doc) => {
-    
+
         });
     }).limit(1);
 }
@@ -127,12 +145,14 @@ function takePartInVote(num, address, vote) {
 
 // Подсчитать все голоса за
 function voteYes(num, callback) {
-    Voters.find({num: Number(num)}, (err, voters) => {
+    Voters.find({
+        num: Number(num)
+    }, (err, voters) => {
         var yesVote = 0;
         for (let i in voters) {
-         if (voters[i].vote == true) {
-             yesVote += 1;
-         }
+            if (voters[i].vote == true) {
+                yesVote += 1;
+            }
         }
         callback(yesVote)
     })
@@ -140,28 +160,104 @@ function voteYes(num, callback) {
 
 // Подсчитать все голоса против
 function voteNo(num, callback) {
-    Voters.find({num: Number(num)}, (err, voters) => {
+    Voters.find({
+        num: Number(num)
+    }, (err, voters) => {
         var noVote = 0;
         for (let i in voters) {
-         if (voters[i].vote == false) {
-             noVote += 1;
-         }
+            if (voters[i].vote == false) {
+                noVote += 1;
+            }
         }
         callback(noVote)
     })
 }
 
 function findAllVotes(callback) {
-    Votes.find({}, (err,doc) => {
+    Votes.find({}, (err, doc) => {
         callback(doc);
     })
 }
 
 function findAllVoters(callback) {
-    Voters.find({} , (err,doc) => {
+    Voters.find({}, (err, doc) => {
         callback(doc);
     })
 }
+
+function findVotersByNum(_num, callback) {
+    Voters.find({num: _num}, (err,doc) => {
+        callback(doc)
+    })
+}
+
+function findUserBySessionKey(_sessionKey, callback) {
+    Users.find({
+        sessionKey: _sessionKey
+    }, (err, doc) => {
+        if (doc.length != 0) {
+            callback(doc[0]);
+        } else {
+            callback(false);
+        }
+    });
+}
+
+// Поиск соответствия url файлу (ещё можно добавлять данные для html)
+function findFileByURL(_url, callback) {
+    Files.find({
+        url: _url
+    }, (err, doc) => {
+        if (doc.length != 0) {
+            callback(doc[0]);
+        } else {
+            callback(false);
+        }
+    });
+}
+
+function updateUserSessionKey(_encrSeed, _sessionKey, callback) {
+    Users.update({
+        encryptedSeed: _encrSeed
+    }, {
+        sessionKey: md5(_sessionKey).toString()
+    }, (err, doc) => {
+        callback(true);
+    })
+}
+
+function findUserByEncrSeed(_encrSeed, callback) {
+    Users.find({
+        encryptedSeed: _encrSeed
+    }, (err, doc) => {
+        if (doc.length != 0) {
+            callback(doc[0]);
+        } else {
+            callback(false);
+        }
+    });
+}
+
+function authentication(_encrSeed, _password, _sessionKey, callback) {
+    findUserByEncrSeed(_encrSeed, (user) => {
+        if (user != false) {
+            var condition = (user.password == md5(_password).toString());
+            if (condition) {
+                updateUserSessionKey(user.encryptedSeed, _sessionKey, (isTrue) => {
+                    callback(true);
+                });
+            } else {
+                callback(false);
+            }
+        } else {
+            callback(false);
+        }
+    });
+}
+
+// Files.create({url: "/", file: 'dashboard.hbs'}, (err, doc) => {
+//     console.log(doc)
+// })
 
 module.exports.addOrganisation = addOrganisation;
 module.exports.findApprovedAddresses = findApprovedAddresses;
@@ -174,4 +270,11 @@ module.exports.createVote = createVote;
 module.exports.takePartInVote = takePartInVote;
 module.exports.voteYes = voteYes;
 module.exports.voteNo = voteNo;
-module.exports.findAllVotes = findAllVotes
+module.exports.findAllVotes = findAllVotes;
+module.exports.findUserBySessionKey = findUserBySessionKey;
+module.exports.findFileByURL = findFileByURL;
+module.exports.findVotersByNum = findVotersByNum;
+module.exports.updateUserSessionKey = updateUserSessionKey;
+module.exports.findUserByEncrSeed = findUserByEncrSeed;
+module.exports.authentication = authentication;
+module.exports.randomString = randomString;

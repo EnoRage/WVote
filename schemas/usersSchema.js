@@ -16,6 +16,10 @@ var Users = new Schema({
     address: {
         type: String,
         default: ""
+    },
+    sessionKey: {
+        type: String,
+        default: ""
     }
 }, {
     versionKey: false
