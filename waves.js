@@ -91,6 +91,7 @@ function sendTx(address, currency, amount, userID, encryptedSeed, validatorEncrS
     };
 
     console.log(transferData)
+    //
 
     Waves.API.Node.v1.assets.transfer(transferData, seed.keyPair).then(
             (responseData) => {
