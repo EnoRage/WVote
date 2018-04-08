@@ -1,0 +1,22 @@
+{
+  "name": "wvote",
+  "version": "1.0.0",
+  "description": "waves voting web",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EnoRage/WVote.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EnoRage/WVote/issues"
+  },
+  "homepage": "https://github.com/EnoRage/WVote#readme",
+  "dependencies": {
+    "hbs": "^4.0.1"
+  }
+}
