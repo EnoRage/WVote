@@ -9,9 +9,9 @@
   
 - ## Shared Logic:
     - BL - Business logic:
-        - DB:
-            - DataBaseObjects - DB Models
-            - DataBaseService - DB API Wrapper
+    - DB:
+        - DataBaseObjects - DB Models
+        - DataBaseService - DB API Wrapper
     - ViewModels - Date Bindings to View :
         - Auth
         - CurrentVotings
