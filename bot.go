@@ -9,13 +9,16 @@ import (
 	"./userlogic"
 	"./votes"
 	"./waves"
+	"github.com/vjeantet/jodaTime"
 
 	mgo "gopkg.in/mgo.v2"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
 var session *mgo.Session
-var proj1 = "*Организация:* Фонд НеСкам\n\n*Адрес:* liwjbfiowbupiweubpwbep\n\n*Тема голосования:* Голосуем за то, чтобы провести новое ICO\n\n*Условия голосования:* иметь больше 100 noscum токенов\n\n*Время завершения голосования:* 9 Апреля, 00:01 (MSK)"
+
+// var proj1 = "*Организация:* Фонд НеСкам\n\n*Адрес:* liwjbfiowbupiweubpwbep\n\n*Тема голосования:* Голосуем за то, чтобы провести новое ICO\n\n*Условия голосования:* иметь больше 100 noscum токенов\n\n*Время завершения голосования:* 9 Апреля, 00:01 (MSK)"
+var proj1 []string
 var proj2 = "*Организация:*  ------\n\n*Адрес:* ------\n\n*Тема голосования:* ------\n\n*Условия голосования:* ------\n\n*Время завершения голосования:* ------"
 var proj3 = "*Организация:*  ---------\n\n*Адрес:* ------\n\n*Тема голосования:* ---------\n\n*Условия голосования:* ---------\n\n*Время завершения голосования:* ------"
 var proj4 = "*Организация:*  ---------------\n\n*Адрес:* ---------\n\n*Тема голосования:* ------------\n\n*Условия голосования:* ------------\n\n*Время завершения голосования:* ------"
@@ -130,12 +133,29 @@ func main() {
 	})
 	b.Handle(&votingData, func(m *tb.Message) {
 		var msg = "Страница 1:\n\n"
-		msg += proj1
+		votes := mongo.FindAllVotes(session)
+		votesCount := len(votes)
+		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes[0].StartTime)
+		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes[0].EndTime)
+		if votesCount != 0 {
+			msg += "*Чё за спор:* \n" + votes[0].Description + "\n"
+			msg += "*Когда начался:* \n" + (startDate) + "\n"
+			msg += "*Когда должен закончиться:* \n" + (endDate) + "\n"
+			msg += "*Закончено ли:* \n"
+			if votes[0].End {
+				msg += "ДА"
+			} else {
+				msg += "НЕТ"
+			}
+		} else {
+			msg += "Голосования ещё не были созданы"
+		}
+
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: menuVote1})
 	})
 	b.Handle(&listVote1, func(c *tb.Callback) {
 		var msg = "Страница 1:\n\n"
-		msg += proj1
+		// msg += proj1
 		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: menuVote1})
 		b.Respond(c, &tb.CallbackResponse{})
 	})
@@ -159,7 +179,7 @@ func main() {
 	})
 	b.Handle(&vote1, func(c *tb.Callback) {
 		var msg = "Вы за или против?\n\n"
-		choseproj = proj1
+		// choseproj = proj1
 		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 		b.Respond(c, &tb.CallbackResponse{})
 	})

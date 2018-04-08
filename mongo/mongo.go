@@ -18,12 +18,12 @@ type Users struct {
 
 // Votes Структура голосования
 type Votes struct {
-	num               string    `bson:"num"`
-	description       string    `bson:"description"`
-	approvedAddresses []string  `bson:"approvedAddresses"`
-	startTime         time.Time `bson:"startTime"`
-	endTime           time.Time `bson:"endTime"`
-	end               bool      `bson:"end"`
+	Num               string    `bson:"num"`
+	Description       string    `bson:"description"`
+	ApprovedAddresses []string  `bson:"approvedAddresses"`
+	StartTime         time.Time `bson:"startTime"`
+	EndTime           time.Time `bson:"endTime"`
+	End               bool      `bson:"end"`
 }
 
 // ConnectToMongo mongo connection
