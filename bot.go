@@ -151,14 +151,15 @@ func main() {
 
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"})
 	})
-	votes1 := mongo.FindAllVotes(session)
+
 	b.Handle("/vote0", func(m *tb.Message) {
+		votes1 := mongo.FindAllVotes(session)
 		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[0].StartTime)
 		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[0].EndTime)
 		choseproj = "0"
 		msg := "*Описание голосования:* \n" + votes1[0].Description + "\n"
-		msg += "*Когда началось:* \n" + (startDate) + "\n"
-		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Начало:* \n" + (startDate) + "\n"
+		msg += "*Окончание:* \n" + (endDate) + "\n"
 		msg += "*Закончено ли:* \n"
 		if votes1[0].End {
 			msg += "ДА"
@@ -168,12 +169,13 @@ func main() {
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
 	b.Handle("/vote1", func(m *tb.Message) {
+		votes1 := mongo.FindAllVotes(session)
 		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[1].StartTime)
 		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[1].EndTime)
 		choseproj = "1"
 		msg := "*Описание голосования:* \n" + votes1[1].Description + "\n"
-		msg += "*Когда началось:* \n" + (startDate) + "\n"
-		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Начало:* \n" + (startDate) + "\n"
+		msg += "*Окончание:* \n" + (endDate) + "\n"
 		msg += "*Закончено ли:* \n"
 		if votes1[1].End {
 			msg += "ДА"
@@ -184,12 +186,13 @@ func main() {
 	})
 
 	b.Handle("/vote2", func(m *tb.Message) {
+		votes1 := mongo.FindAllVotes(session)
 		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[2].StartTime)
 		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[2].EndTime)
 		choseproj = "2"
 		msg := "*Описание голосования:* \n" + votes1[2].Description + "\n"
-		msg += "*Когда началось:* \n" + (startDate) + "\n"
-		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Начало:* \n" + (startDate) + "\n"
+		msg += "*Окончание:* \n" + (endDate) + "\n"
 		msg += "*Закончено ли:* \n"
 		if votes1[2].End {
 			msg += "ДА"
@@ -199,12 +202,13 @@ func main() {
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
 	b.Handle("/vote3", func(m *tb.Message) {
+		votes1 := mongo.FindAllVotes(session)
 		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[3].StartTime)
 		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[3].EndTime)
 		choseproj = "3"
 		msg := "*Описание голосования:* \n" + votes1[3].Description + "\n"
-		msg += "*Когда началось:* \n" + (startDate) + "\n"
-		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Начало:* \n" + (startDate) + "\n"
+		msg += "*Окончание:* \n" + (endDate) + "\n"
 		msg += "*Закончено ли:* \n"
 		if votes1[3].End {
 			msg += "ДА"
@@ -214,12 +218,13 @@ func main() {
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
 	b.Handle("/vote4", func(m *tb.Message) {
+		votes1 := mongo.FindAllVotes(session)
 		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[4].StartTime)
 		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[4].EndTime)
 		choseproj = "4"
 		msg := "*Описание голосования:* \n" + votes1[4].Description + "\n"
-		msg += "*Когда началось:* \n" + (startDate) + "\n"
-		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Начало:* \n" + (startDate) + "\n"
+		msg += "*Окончание:* \n" + (endDate) + "\n"
 		msg += "*Закончено ли:* \n"
 		if votes1[4].End {
 			msg += "ДА"
@@ -229,12 +234,13 @@ func main() {
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
 	b.Handle("/vote5", func(m *tb.Message) {
+		votes1 := mongo.FindAllVotes(session)
 		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[5].StartTime)
 		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[5].EndTime)
 		choseproj = "5"
 		msg := "*Описание голосования:* \n" + votes1[5].Description + "\n"
-		msg += "*Когда началось:* \n" + (startDate) + "\n"
-		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Начало:* \n" + (startDate) + "\n"
+		msg += "*Окончание:* \n" + (endDate) + "\n"
 		msg += "*Закончено ли:* \n"
 		if votes1[5].End {
 			msg += "ДА"
@@ -244,12 +250,13 @@ func main() {
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
 	b.Handle("/vote6", func(m *tb.Message) {
+		votes1 := mongo.FindAllVotes(session)
 		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[6].StartTime)
 		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[6].EndTime)
 		choseproj = "6"
 		msg := "*Описание голосования:* \n" + votes1[6].Description + "\n"
-		msg += "*Когда началось:* \n" + (startDate) + "\n"
-		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Начало:* \n" + (startDate) + "\n"
+		msg += "*Окончание:* \n" + (endDate) + "\n"
 		msg += "*Закончено ли:* \n"
 		if votes1[6].End {
 			msg += "ДА"
@@ -259,12 +266,13 @@ func main() {
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
 	b.Handle("/vote7", func(m *tb.Message) {
+		votes1 := mongo.FindAllVotes(session)
 		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[7].StartTime)
 		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[7].EndTime)
 		choseproj = "7"
 		msg := "*Описание голосования:* \n" + votes1[7].Description + "\n"
-		msg += "*Когда началось:* \n" + (startDate) + "\n"
-		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Начало:* \n" + (startDate) + "\n"
+		msg += "*Окончание:* \n" + (endDate) + "\n"
 		msg += "*Закончено ли:* \n"
 		if votes1[7].End {
 			msg += "ДА"
@@ -274,12 +282,13 @@ func main() {
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
 	b.Handle("/vote8", func(m *tb.Message) {
+		votes1 := mongo.FindAllVotes(session)
 		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[8].StartTime)
 		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[8].EndTime)
 		choseproj = "8"
 		msg := "*Описание голосования:* \n" + votes1[8].Description + "\n"
-		msg += "*Когда началось:* \n" + (startDate) + "\n"
-		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Начало:* \n" + (startDate) + "\n"
+		msg += "*Окончание:* \n" + (endDate) + "\n"
 		msg += "*Закончено ли:* \n"
 		if votes1[8].End {
 			msg += "ДА"
@@ -289,12 +298,13 @@ func main() {
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
 	b.Handle("/vote9", func(m *tb.Message) {
+		votes1 := mongo.FindAllVotes(session)
 		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[9].StartTime)
 		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[9].EndTime)
 		choseproj = "9"
 		msg := "*Описание голосования:* \n" + votes1[9].Description + "\n"
-		msg += "*Когда началось:* \n" + (startDate) + "\n"
-		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Начало:* \n" + (startDate) + "\n"
+		msg += "*Окончание:* \n" + (endDate) + "\n"
 		msg += "*Закончено ли:* \n"
 		if votes1[9].End {
 			msg += "ДА"
@@ -304,12 +314,13 @@ func main() {
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
 	b.Handle("/vote10", func(m *tb.Message) {
+		votes1 := mongo.FindAllVotes(session)
 		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[10].StartTime)
 		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[10].EndTime)
 		choseproj = "10"
 		msg := "*Описание голосования:* \n" + votes1[10].Description + "\n"
-		msg += "*Когда началось:* \n" + (startDate) + "\n"
-		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Начало:* \n" + (startDate) + "\n"
+		msg += "*Окончание:* \n" + (endDate) + "\n"
 		msg += "*Закончено ли:* \n"
 		if votes1[10].End {
 			msg += "ДА"
