@@ -38,6 +38,21 @@ func SendDataTx(userID string, encrSeed string, voteNum string, vote string) str
 	return body
 }
 
+// SendDataTx создание голосование
+func SendAttechmentTxToValidator(userID string, encrSeed string, voteNum string, vote string) string {
+	data := url.Values{
+		"userID":   {userID},
+		"encrSeed": {encrSeed},
+		"voteNum":  {voteNum},
+		"vote":     {vote},
+	}
+	url1 := "http://" + serverIP + ":3001/sendAttechmentToValidator"
+
+	body := waves.Post(url1, data)
+
+	return body
+}
+
 // Vote проголосовать
 func Vote(voteNum string, address string, vote string) string {
 	data := url.Values{

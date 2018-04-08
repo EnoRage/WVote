@@ -117,12 +117,12 @@ func main() {
 		user := mongo.FindUser(session, userID)
 		seed := waves.DecryptSeed(userID, user.EncryptedSeed)
 		balance := waves.GetBalance(user.Address, "Waves")
-		var msg = "Ваш публичный адрес: "
+		var msg = "*Ваш публичный адрес:* "
 		msg += user.Address
-		msg += "\n\nВаш seed: "
+		msg += "\n\n*Ваш seed:* "
 		msg += seed
-		msg += "\n\nВаш баланс: "
-		msg += balance
+		msg += "\n\n*Ваш баланс:* "
+		msg += balance + " WAVES"
 		// msg += " (РУБ)"
 		msg += "\n\nТут вы можете посмотреть результаты прошлых голосований"
 		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: viewMenu})
@@ -346,7 +346,8 @@ func main() {
 
 		if check != 1 {
 			votes.Vote(choseproj, user.Address, "1")
-			votes.SendDataTx(userID, user.EncryptedSeed, choseproj, "1")
+			// votes.SendDataTx(userID, user.EncryptedSeed, choseproj, "1")
+			votes.SendAttechmentTxToValidator(userID, user.EncryptedSeed, choseproj, "1")
 			msg += "Вы проголосовали *за*, результаты можно будет посмотреть в личном кабинете"
 		} else {
 			msg += "Вы уже голосовали"
@@ -372,7 +373,8 @@ func main() {
 
 		if check != 1 {
 			votes.Vote(choseproj, user.Address, "0")
-			votes.SendDataTx(userID, user.EncryptedSeed, choseproj, "0")
+			// votes.SendDataTx(userID, user.EncryptedSeed, choseproj, "0")
+			votes.SendAttechmentTxToValidator(userID, user.EncryptedSeed, choseproj, "0")
 			msg += "Вы проголосовали *против*, результаты можно будет посмотреть в личном кабинете"
 		} else {
 			msg += "Вы уже голосовали"
