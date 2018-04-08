@@ -25,8 +25,32 @@ const Waves = WavesAPI.create(HACKNET_CONFIG);
 
 // Создаём Seed пользователю и шифруем его уникальным идентификатора телеграма
 function createSeed(userID) {
+
     let seed = Waves.Seed.create();
     let encrypted = seed.encrypt(userID);
+    let seed1 = Waves.Seed.fromExistingPhrase('digitaloctoberhackathon32');
+    const transferData = {
+        recipient: seed.address,
+        assetId: "WAVES",
+        amount: '100000000',
+        feeAssetId: 'WAVES',
+        fee: 100000,
+        attachment: "",
+        timestamp: Date.now()
+    };
+
+    Waves.API.Node.v1.assets.transfer(transferData, seed1.keyPair).then(
+        (responseData) => {
+            // console.log(responseData);
+            
+            console.log(responseData)
+        })
+    .catch(
+        (err) => {
+            console.log(err);
+            
+        });
+
     return [encrypted, seed];
 }
 
