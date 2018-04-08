@@ -52,22 +52,22 @@ func main() {
 	viewMy := tb.InlineButton{Unique: "viewMy", Text: "Созданные мной голосования"}
 	viewMenu := [][]tb.InlineButton{{viewRes}, {viewMy}}
 
-	listVote1 := tb.InlineButton{Unique: "listvote1", Text: "Страница 1"}
-	listVote2 := tb.InlineButton{Unique: "listvote2", Text: "Страница 2"}
-	listVote3 := tb.InlineButton{Unique: "listvote3", Text: "Страница 3"}
-	listVote4 := tb.InlineButton{Unique: "listvote4", Text: "Страница 4"}
+	// listVote1 := tb.InlineButton{Unique: "listvote1", Text: "Страница 1"}
+	// listVote2 := tb.InlineButton{Unique: "listvote2", Text: "Страница 2"}
+	// listVote3 := tb.InlineButton{Unique: "listvote3", Text: "Страница 3"}
+	// listVote4 := tb.InlineButton{Unique: "listvote4", Text: "Страница 4"}
 
-	vote1 := tb.InlineButton{Unique: "vote1", Text: "Проголосовать за 1"}
-	vote2 := tb.InlineButton{Unique: "vote2", Text: "Проголосовать за 2"}
-	vote3 := tb.InlineButton{Unique: "vote3", Text: "Проголосовать за 3"}
-	vote4 := tb.InlineButton{Unique: "vote4", Text: "Проголосовать за 4"}
+	// vote1 := tb.InlineButton{Unique: "vote1", Text: "Проголосовать за 1"}
+	// vote2 := tb.InlineButton{Unique: "vote2", Text: "Проголосовать за 2"}
+	// vote3 := tb.InlineButton{Unique: "vote3", Text: "Проголосовать за 3"}
+	// vote4 := tb.InlineButton{Unique: "vote4", Text: "Проголосовать за 4"}
 
 	menu := tb.InlineButton{Unique: "menu", Text: "Главное меню"}
 
-	menuVote1 := [][]tb.InlineButton{{vote1}, {listVote2, listVote3, listVote4}, {menu}}
-	menuVote2 := [][]tb.InlineButton{{vote2}, {listVote1, listVote3, listVote4}, {menu}}
-	menuVote3 := [][]tb.InlineButton{{vote3}, {listVote1, listVote2, listVote4}, {menu}}
-	menuVote4 := [][]tb.InlineButton{{vote4}, {listVote1, listVote2, listVote3}, {menu}}
+	// menuVote1 := [][]tb.InlineButton{{vote1}, {listVote2, listVote3, listVote4}, {menu}}
+	// menuVote2 := [][]tb.InlineButton{{vote2}, {listVote1, listVote3, listVote4}, {menu}}
+	// menuVote3 := [][]tb.InlineButton{{vote3}, {listVote1, listVote2, listVote4}, {menu}}
+	// menuVote4 := [][]tb.InlineButton{{vote4}, {listVote1, listVote2, listVote3}, {menu}}
 
 	yes := tb.InlineButton{Unique: "yes", Text: "✅ За"}
 	no := tb.InlineButton{Unique: "no", Text: "❌ Против"}
@@ -132,85 +132,259 @@ func main() {
 		b.Respond(c, &tb.CallbackResponse{})
 	})
 	b.Handle(&votingData, func(m *tb.Message) {
-		var msg = "Страница 1:\n\n"
+		var msg = "Список всех голосований:\n\n"
+
 		votes := mongo.FindAllVotes(session)
 		votesCount := len(votes)
-		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes[0].StartTime)
-		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes[0].EndTime)
+		counter := 0
 		if votesCount != 0 {
-			msg += "*Чё за спор:* \n" + votes[0].Description + "\n"
-			msg += "*Когда начался:* \n" + (startDate) + "\n"
-			msg += "*Когда должен закончиться:* \n" + (endDate) + "\n"
-			msg += "*Закончено ли:* \n"
-			if votes[0].End {
-				msg += "ДА"
-			} else {
-				msg += "НЕТ"
+			for key := range votes {
+				msg += "*Описание голосования:* \n" + votes[key].Description + "\n"
+				msg += "*Чтобы проголосовать* нажмите на /"
+				msg += "vote" + strconv.Itoa(counter) + "\n\n"
+				counter++
 			}
+
 		} else {
 			msg += "Голосования ещё не были созданы"
 		}
 
-		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: menuVote1})
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"})
 	})
-	b.Handle(&listVote1, func(c *tb.Callback) {
-		var msg = "Страница 1:\n\n"
-		// msg += proj1
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: menuVote1})
-		b.Respond(c, &tb.CallbackResponse{})
+	votes1 := mongo.FindAllVotes(session)
+	b.Handle("/vote0", func(m *tb.Message) {
+		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[0].StartTime)
+		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[0].EndTime)
+		choseproj = "0"
+		msg := "*Описание голосования:* \n" + votes1[0].Description + "\n"
+		msg += "*Когда началось:* \n" + (startDate) + "\n"
+		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Закончено ли:* \n"
+		if votes1[0].End {
+			msg += "ДА"
+		} else {
+			msg += "НЕТ"
+		}
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
-	b.Handle(&listVote2, func(c *tb.Callback) {
-		var msg = "Страница 2:\n\n"
-		msg += proj2
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: menuVote2})
-		b.Respond(c, &tb.CallbackResponse{})
+	b.Handle("/vote1", func(m *tb.Message) {
+		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[1].StartTime)
+		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[1].EndTime)
+		choseproj = "1"
+		msg := "*Описание голосования:* \n" + votes1[1].Description + "\n"
+		msg += "*Когда началось:* \n" + (startDate) + "\n"
+		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Закончено ли:* \n"
+		if votes1[1].End {
+			msg += "ДА"
+		} else {
+			msg += "НЕТ"
+		}
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
-	b.Handle(&listVote3, func(c *tb.Callback) {
-		var msg = "Страница 3:\n\n"
-		msg += proj3
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: menuVote3})
-		b.Respond(c, &tb.CallbackResponse{})
+
+	b.Handle("/vote2", func(m *tb.Message) {
+		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[2].StartTime)
+		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[2].EndTime)
+		choseproj = "2"
+		msg := "*Описание голосования:* \n" + votes1[2].Description + "\n"
+		msg += "*Когда началось:* \n" + (startDate) + "\n"
+		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Закончено ли:* \n"
+		if votes1[2].End {
+			msg += "ДА"
+		} else {
+			msg += "НЕТ"
+		}
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
-	b.Handle(&listVote4, func(c *tb.Callback) {
-		var msg = "Страница 4:\n\n"
-		msg += proj4
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: menuVote4})
-		b.Respond(c, &tb.CallbackResponse{})
+	b.Handle("/vote3", func(m *tb.Message) {
+		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[3].StartTime)
+		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[3].EndTime)
+		choseproj = "3"
+		msg := "*Описание голосования:* \n" + votes1[3].Description + "\n"
+		msg += "*Когда началось:* \n" + (startDate) + "\n"
+		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Закончено ли:* \n"
+		if votes1[3].End {
+			msg += "ДА"
+		} else {
+			msg += "НЕТ"
+		}
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
-	b.Handle(&vote1, func(c *tb.Callback) {
-		var msg = "Вы за или против?\n\n"
-		// choseproj = proj1
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
-		b.Respond(c, &tb.CallbackResponse{})
+	b.Handle("/vote4", func(m *tb.Message) {
+		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[4].StartTime)
+		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[4].EndTime)
+		choseproj = "4"
+		msg := "*Описание голосования:* \n" + votes1[4].Description + "\n"
+		msg += "*Когда началось:* \n" + (startDate) + "\n"
+		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Закончено ли:* \n"
+		if votes1[4].End {
+			msg += "ДА"
+		} else {
+			msg += "НЕТ"
+		}
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
-	b.Handle(&vote2, func(c *tb.Callback) {
-		var msg = "Вы за или против?\n\n"
-		choseproj = proj2
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
-		b.Respond(c, &tb.CallbackResponse{})
+	b.Handle("/vote5", func(m *tb.Message) {
+		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[5].StartTime)
+		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[5].EndTime)
+		choseproj = "5"
+		msg := "*Описание голосования:* \n" + votes1[5].Description + "\n"
+		msg += "*Когда началось:* \n" + (startDate) + "\n"
+		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Закончено ли:* \n"
+		if votes1[5].End {
+			msg += "ДА"
+		} else {
+			msg += "НЕТ"
+		}
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
-	b.Handle(&vote3, func(c *tb.Callback) {
-		var msg = "Вы за или против?\n\n"
-		choseproj = proj3
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
-		b.Respond(c, &tb.CallbackResponse{})
+	b.Handle("/vote6", func(m *tb.Message) {
+		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[6].StartTime)
+		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[6].EndTime)
+		choseproj = "6"
+		msg := "*Описание голосования:* \n" + votes1[6].Description + "\n"
+		msg += "*Когда началось:* \n" + (startDate) + "\n"
+		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Закончено ли:* \n"
+		if votes1[6].End {
+			msg += "ДА"
+		} else {
+			msg += "НЕТ"
+		}
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
-	b.Handle(&vote4, func(c *tb.Callback) {
-		var msg = "Вы за или против?\n\n"
-		choseproj = proj4
-		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
-		b.Respond(c, &tb.CallbackResponse{})
+	b.Handle("/vote7", func(m *tb.Message) {
+		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[7].StartTime)
+		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[7].EndTime)
+		choseproj = "7"
+		msg := "*Описание голосования:* \n" + votes1[7].Description + "\n"
+		msg += "*Когда началось:* \n" + (startDate) + "\n"
+		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Закончено ли:* \n"
+		if votes1[7].End {
+			msg += "ДА"
+		} else {
+			msg += "НЕТ"
+		}
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
 	})
+	b.Handle("/vote8", func(m *tb.Message) {
+		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[8].StartTime)
+		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[8].EndTime)
+		choseproj = "8"
+		msg := "*Описание голосования:* \n" + votes1[8].Description + "\n"
+		msg += "*Когда началось:* \n" + (startDate) + "\n"
+		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Закончено ли:* \n"
+		if votes1[8].End {
+			msg += "ДА"
+		} else {
+			msg += "НЕТ"
+		}
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
+	})
+	b.Handle("/vote9", func(m *tb.Message) {
+		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[9].StartTime)
+		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[9].EndTime)
+		choseproj = "9"
+		msg := "*Описание голосования:* \n" + votes1[9].Description + "\n"
+		msg += "*Когда началось:* \n" + (startDate) + "\n"
+		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Закончено ли:* \n"
+		if votes1[9].End {
+			msg += "ДА"
+		} else {
+			msg += "НЕТ"
+		}
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
+	})
+	b.Handle("/vote10", func(m *tb.Message) {
+		startDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[10].StartTime)
+		endDate := jodaTime.Format("YYYY.MM.dd HH:mm", votes1[10].EndTime)
+		choseproj = "10"
+		msg := "*Описание голосования:* \n" + votes1[10].Description + "\n"
+		msg += "*Когда началось:* \n" + (startDate) + "\n"
+		msg += "*Когда должно закончиться:* \n" + (endDate) + "\n"
+		msg += "*Закончено ли:* \n"
+		if votes1[10].End {
+			msg += "ДА"
+		} else {
+			msg += "НЕТ"
+		}
+		b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
+	})
+	// b.Handle("/vote1", func(m *tb.Message) {
+	// 	choseproj = "vote1"
+	// 	var msg = "Подробное сообщение"
+	// 	b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
+	// })
+	// b.Handle("/vote2", func(m *tb.Message) {
+	// 	choseproj = "vote2"
+	// 	var msg = "Подробное сообщение"
+	// 	b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
+	// })
+	// b.Handle("/vote3", func(m *tb.Message) {
+	// 	choseproj = "vote3"
+	// 	var msg = "Подробное сообщение"
+	// 	b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
+	// })
+	// b.Handle("/vote4", func(m *tb.Message) {
+	// 	choseproj = "fond4"
+	// 	var msg = "Подробное сообщение"
+	// 	b.Send(m.Sender, msg, &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{InlineKeyboard: yesno})
+	// })
+
 	b.Handle(&yes, func(c *tb.Callback) {
 		yesnores = "yes"
-		var msg = "Вы проголосовали *за*, результаты можно будет посмотреть в личном кабинете"
+		userID := strconv.Itoa(c.Sender.ID)
+		user := mongo.FindUser(session, userID)
+		voters := mongo.FindAllVoters(session)
+		var msg string
+		check := 0
+		num, _ := strconv.Atoi(choseproj)
+		for key := range voters {
+			if voters[key].Address == user.Address && voters[key].Num == num {
+				check++
+			}
+		}
+
+		if check != 1 {
+			votes.Vote(choseproj, user.Address, "1")
+			msg += "Вы проголосовали *за*, результаты можно будет посмотреть в личном кабинете"
+		} else {
+			msg += "Вы уже голосовали"
+		}
+
 		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"})
 		b.Send(c.Sender, "Главное меню", &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{ResizeReplyKeyboard: true, ReplyKeyboard: mainMenu})
 		b.Respond(c, &tb.CallbackResponse{})
 	})
 	b.Handle(&no, func(c *tb.Callback) {
 		yesnores = "yes"
-		var msg = "Вы проголосовали *против*, результаты можно будет посмотреть в личном кабинете"
+		userID := strconv.Itoa(c.Sender.ID)
+		user := mongo.FindUser(session, userID)
+		voters := mongo.FindAllVoters(session)
+		var msg string
+		check := 0
+		num, _ := strconv.Atoi(choseproj)
+		for key := range voters {
+			if voters[key].Address == user.Address && voters[key].Num == num {
+				check++
+			}
+		}
+
+		if check != 1 {
+			votes.Vote(choseproj, user.Address, "0")
+			msg += "Вы проголосовали *против*, результаты можно будет посмотреть в личном кабинете"
+		} else {
+			msg += "Вы уже голосовали"
+		}
+
 		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"})
 		b.Send(c.Sender, "Главное меню", &tb.SendOptions{ParseMode: "Markdown"}, &tb.ReplyMarkup{ResizeReplyKeyboard: true, ReplyKeyboard: mainMenu})
 		b.Respond(c, &tb.CallbackResponse{})
@@ -226,6 +400,7 @@ func main() {
 		msg += "Организация: 1\n\n"
 		msg += "Ваш голос: да\n\n"
 		msg += "Тема голосования: 1\n\n"
+
 		msg += "Завершен: да\n\n"
 		msg += "Результат: 70 за и 30 против\n\n"
 		b.Edit(c.Message, msg, &tb.SendOptions{ParseMode: "Markdown"})
